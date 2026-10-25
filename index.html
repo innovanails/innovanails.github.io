@@ -2347,6 +2347,7 @@
         np.appendChild(el("span", "", "Abonás " + (precio ? plata(precio) + " " : "") + "en efectivo en el local. No tenés que pagar nada ahora."));
         caja.appendChild(np);
       }
+      caja.appendChild(bloqueQR(res.token));
       caja.appendChild(bloqueDiseno(res.servicio, !!res.con_remocion, resumen.split(" a las ")[0], hora, nombre.split(" ")[0]));
 
       const acciones = el("div", "acciones");
