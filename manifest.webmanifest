@@ -1,0 +1,15 @@
+{
+  "name": "Innova Nails",
+  "short_name": "Innova Nails",
+  "description": "Reservá tu turno online en Innova Nails, Orán, Salta.",
+  "lang": "es-AR",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#eadfcc",
+  "theme_color": "#eadfcc",
+  "icons": [
+    { "src": "assets/images/brand/nena-icono.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/images/brand/nena-icono-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
