@@ -1,0 +1,52 @@
+/* Estilo común de las páginas legales de Innova Nails (mismos colores y tipografías que el resto del sitio) */
+:root { --marfil:#0a0a0c; --arena:#1c1c1c; --camel:#d8b86e; --bronce:#e2c07a; --cafe:#ece6da; --suave:#b3ada3; --tinta:#f6f3ee; --papel:#121212;
+  --linea:rgba(216,184,110,.20); --linea-2:rgba(216,184,110,.42); --ok:#7fcf95; --rojo:#f08a7c;
+  --display:'Cormorant Garamond','Garamond','Times New Roman',Georgia,serif; --sans:'Jost','Helvetica Neue',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif; --lado:clamp(18px,5vw,48px); }
+* { box-sizing:border-box; }
+[hidden] { display:none !important; }
+html { -webkit-text-size-adjust:100%; color-scheme:dark; }
+body { margin:0; min-height:100vh; display:flex; flex-direction:column; font-family:var(--sans); font-size:16px; line-height:1.7; background:var(--marfil); color:var(--cafe); -webkit-font-smoothing:antialiased; }
+h1,h2,h3 { margin:0; font-family:var(--display); font-weight:400; line-height:1.15; color:var(--tinta); }
+a { color:var(--bronce); }
+:focus-visible { outline:2px solid var(--tinta); outline-offset:3px; }
+.wrap { width:100%; max-width:820px; margin:0 auto; padding:0 var(--lado); }
+.top { position:sticky; top:0; z-index:20; background:rgba(10,10,12,.92); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-bottom:1px solid var(--linea); }
+.top .wrap { display:flex; align-items:center; justify-content:space-between; gap:16px; min-height:64px; max-width:1180px; }
+.marca { display:inline-flex; align-items:center; gap:12px; text-decoration:none; font:500 14px var(--sans); letter-spacing:.26em; text-transform:uppercase; color:var(--tinta); }
+.marca img { width:34px; height:34px; object-fit:contain; }
+.top a.volver { font-size:14px; }
+main { flex:1; padding:48px 0 72px; }
+.eyebrow { display:inline-flex; align-items:center; gap:14px; font:500 11.5px/1.2 var(--sans); letter-spacing:.32em; text-transform:uppercase; color:var(--bronce); margin-bottom:14px; }
+.eyebrow::before { content:""; width:28px; height:1px; background:currentColor; opacity:.7; }
+h1 { font-size:clamp(34px,6vw,52px); margin-bottom:10px; }
+h1 em { font-style:italic; color:var(--bronce); }
+h2 { font-size:clamp(24px,4vw,30px); margin:38px 0 10px; }
+p, li { color:var(--cafe); }
+ul, ol { padding-left:22px; } li { margin:6px 0; }
+.fecha { color:var(--suave); font-size:14px; margin:0 0 26px; }
+.aviso { border:1px solid var(--linea-2); background:var(--papel); padding:16px 18px; margin:22px 0; }
+.aviso strong { color:var(--tinta); }
+.datos { border:1px solid var(--linea); background:var(--papel); padding:6px 18px; margin:18px 0; list-style:none; }
+.datos li { padding:8px 0; border-bottom:1px solid var(--linea); margin:0; } .datos li:last-child { border-bottom:0; }
+.datos b { color:var(--tinta); font-weight:500; }
+.caja { border:1px solid var(--linea); background:var(--papel); padding:clamp(18px,4vw,30px); margin:24px 0; }
+.campo { display:block; margin:0 0 18px; } .campo > span { display:block; font:500 12px var(--sans); letter-spacing:.14em; text-transform:uppercase; color:var(--suave); margin-bottom:6px; }
+.input { width:100%; min-height:50px; padding:12px 14px; background:var(--marfil); color:var(--tinta); border:1px solid var(--linea-2); border-radius:0; font:inherit; }
+textarea.input { min-height:96px; resize:vertical; }
+.ayuda { color:var(--suave); font-size:14px; margin:6px 0 0; }
+.opciones { display:grid; gap:10px; margin:0 0 20px; }
+.opcion { display:flex; gap:12px; align-items:flex-start; border:1px solid var(--linea-2); padding:14px; cursor:pointer; }
+.opcion input { margin-top:5px; accent-color:var(--camel); }
+.opcion b { color:var(--tinta); font-weight:500; display:block; } .opcion small { color:var(--suave); font-size:14px; }
+.btn { display:inline-flex; align-items:center; justify-content:center; gap:10px; min-height:52px; padding:0 30px; border:1px solid var(--tinta); border-radius:0; background:var(--tinta); color:var(--marfil); font:500 12px var(--sans); letter-spacing:.22em; text-transform:uppercase; text-decoration:none; cursor:pointer; }
+.btn:hover { background:transparent; color:var(--tinta); }
+.btn:disabled { background:var(--arena); color:var(--suave); border-color:var(--arena); cursor:not-allowed; }
+.btn-borde { background:transparent; color:var(--tinta); border-color:var(--linea-2); }
+.btn-bloque { width:100%; }
+.error { color:var(--rojo); margin:12px 0 0; }
+.codigo { font:400 clamp(30px,8vw,46px)/1.2 var(--display); color:var(--bronce); letter-spacing:.06em; margin:8px 0; word-break:break-all; }
+.pie-legal { border-top:1px solid var(--linea); padding:28px 0 36px; font-size:14px; color:var(--suave); text-align:center; }
+.pie-legal .wrap { max-width:1180px; }
+.pie-legal nav { display:flex; flex-wrap:wrap; gap:8px 22px; justify-content:center; margin:0 0 12px; }
+.pie-legal a { color:var(--cafe); }
+.pie-legal .arrep { color:var(--tinta); font-weight:500; }

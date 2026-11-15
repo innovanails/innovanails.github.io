@@ -73,6 +73,11 @@
     .input { width: 100%; height: 52px; padding: 0 2px; border: 0; border-bottom: 1px solid var(--linea-2); border-radius: 0; background: transparent; color: var(--tinta); font: 400 17px var(--sans); transition: border-color .3s, box-shadow .3s; -webkit-appearance: none; appearance: none; }
     .input::placeholder { color: var(--apagado); }
     .input:focus { outline: none; border-bottom-color: var(--tinta); box-shadow: 0 1px 0 0 var(--tinta); }
+    .acepto { display: flex; gap: 10px; align-items: flex-start; margin: 16px 0 12px; font-size: 14px; line-height: 1.5; color: var(--cafe); cursor: pointer; }
+    .acepto input { margin-top: 4px; accent-color: var(--camel); flex: none; }
+    footer .legal { display: flex; flex-wrap: wrap; gap: 6px 18px; justify-content: center; margin: 12px 0 0; }
+    footer .legal a { color: var(--cafe); }
+    footer .legal a.arrep { color: var(--tinta); font-weight: 500; }
     .ayuda { font-size: 13.5px; color: var(--suave); margin: 6px 0 0; line-height: 1.55; }
     .tabs { display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 26px; border-bottom: 1px solid var(--linea); }
     .tab { padding: 14px 8px; background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; color: var(--suave); font: 500 12px var(--sans); letter-spacing: .22em; text-transform: uppercase; cursor: pointer; }
@@ -295,6 +300,13 @@
   <footer>
     <div class="wrap">
       <span id="pieNegocio">Innova Nails</span> · <a id="pieWa" href="#" target="_blank" rel="noopener" hidden>Escribinos por WhatsApp</a>
+      <nav class="legal" aria-label="Información legal">
+        <a href="terminos.html">Términos y condiciones (contrato de adhesión – Ley 24.240)</a>
+        <a href="privacidad.html">Política de privacidad</a>
+        <a class="arrep" href="arrepentimiento.html">Botón de arrepentimiento</a>
+        <a class="arrep" href="arrepentimiento.html?tipo=baja">Botón de baja de servicio</a>
+        <a href="https://www.argentina.gob.ar/produccion/defensadelconsumidor/formulario" target="_blank" rel="noopener">Defensa de las y los Consumidores. Para reclamos, ingrese aquí</a>
+      </nav>
     </div>
   </footer>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -305,7 +317,7 @@
     const SUPABASE_KEY = "sb_publishable_-HEFq0BXXVAxEDTFJUoi_w_0TZ9DFKH";
     const SITIO = "https://innovanails.github.io/";
     // Texto de la política de devolución que se muestra antes de pagar (cambialo si Nena cambia la política)
-    const POLITICA_DEVOLUCION = "Si no es lo que esperabas, podés pedir la devolución dentro de las 24 hs de la compra escribiéndonos por WhatsApp.";
+    const POLITICA_DEVOLUCION = "Podés arrepentirte dentro de los 10 días corridos de la compra y te devolvemos el 100%, sin dar explicaciones. Usá el botón de arrepentimiento que está al pie de la página.";
     // Claves propias del aula (distintas a las del panel, para que no se pisen las sesiones)
     const K_TOKEN = "aula_token", K_REFRESCO = "aula_refresco", K_FICHA = "aula_ficha_pendiente";
 
@@ -764,8 +776,20 @@
         const b = boton("Entrar al taller", function () { abrirAula(c.id); });
         b.classList.add("btn-bloque"); der.appendChild(b);
       } else {
+        const acepto = el("label", "acepto");
+        const chk = el("input"); chk.type = "checkbox"; chk.id = "aceptoTerminos";
+        acepto.appendChild(chk);
+        const txt = el("span", "", "Leí y acepto los ");
+        [["terminos.html", "términos y condiciones"], ["privacidad.html", "política de privacidad"]].forEach(function (x, i) {
+          if (i) txt.appendChild(document.createTextNode(" y la "));
+          const a = el("a", "", x[1]); a.href = x[0]; a.target = "_blank"; a.rel = "noopener"; txt.appendChild(a);
+        });
+        acepto.appendChild(txt);
+        der.appendChild(acepto);
         const b = boton("Comprar el taller", function () { comprar(c, b); });
-        b.classList.add("btn-bloque"); der.appendChild(b);
+        b.classList.add("btn-bloque"); b.disabled = true;
+        chk.addEventListener("change", function () { b.disabled = !chk.checked; });
+        der.appendChild(b);
         der.appendChild(el("p", "ayuda", S.token ? "Pagás de forma segura con Mercado Pago. Apenas se aprueba el pago, se habilita tu acceso." : "Primero creás tu cuenta (es gratis) y después pagás con Mercado Pago. El acceso se habilita apenas se aprueba el pago."));
         der.appendChild(el("p", "ayuda", POLITICA_DEVOLUCION));
       }
@@ -1018,7 +1042,7 @@
     }
 
     // ---------- Panel de la dueña (solo lo ve quien figura como dueña en la base) ----------
-    const PN = { filas: [], resenas: [], sub: "alumnas", buscar: "", abierta: null };
+    const PN = { filas: [], resenas: [], pedidos: [], sub: "alumnas", buscar: "", abierta: null };
     async function detectarDuena() {
       if (!S.token) { S.duena = false; return false; }
       if (S.duenaDe === S.token) return !!S.duena;
@@ -1055,10 +1079,12 @@
       try {
         const res = await Promise.all([
           rpc("cursos_resumen", {}),
-          leer("/rest/v1/resenas_cursos?select=id,estrellas,texto,visible,creado,cursos(nombre),alumnas(nombre)&order=creado.desc&limit=100").catch(function () { return []; })
+          leer("/rest/v1/resenas_cursos?select=id,estrellas,texto,visible,creado,cursos(nombre),alumnas(nombre)&order=creado.desc&limit=100").catch(function () { return []; }),
+          rpc("arrepentimientos_listar", {}).catch(function () { return null; })
         ]);
         PN.filas = res[0] && res[0].ok ? (res[0].filas || []) : [];
         PN.resenas = res[1] || [];
+        PN.pedidos = res[2] && res[2].ok ? (res[2].filas || []) : [];
       } catch (e) { return mensaje("No pudimos cargar el panel", "Revisá tu conexión y probá de nuevo.", [boton("Reintentar", irPanel)]); }
       pintarPanel();
     }
@@ -1069,7 +1095,7 @@
       const h1 = el("h1", ""); h1.appendChild(document.createTextNode("Panel de ")); h1.appendChild(el("em", "", "Nena")); v.appendChild(h1);
       if (PN.abierta) { pnFicha(v); return vista("vDuena"); }
       const nav = el("div", "pn-sub");
-      [["alumnas", "Alumnas"], ["stats", "Estadísticas"], ["opiniones", "Opiniones"], ["talleres", "Talleres"]].forEach(function (x) {
+      [["alumnas", "Alumnas"], ["stats", "Estadísticas"], ["opiniones", "Opiniones"], ["talleres", "Talleres"], ["pedidos", "Arrepentimientos" + (PN.pedidos.filter(function (p) { return p.estado === "recibido"; }).length ? " (" + PN.pedidos.filter(function (p) { return p.estado === "recibido"; }).length + ")" : "")]].forEach(function (x) {
         const b = el("button", "btn btn-borde btn-chico", x[1]);
         b.type = "button"; b.setAttribute("aria-pressed", PN.sub === x[0] ? "true" : "false");
         b.onclick = function () { PN.sub = x[0]; pintarPanel(); };
@@ -1079,6 +1105,7 @@
       if (PN.sub === "alumnas") pnLista(v);
       else if (PN.sub === "stats") pnStats(v);
       else if (PN.sub === "opiniones") pnOpiniones(v);
+      else if (PN.sub === "pedidos") pnPedidos(v);
       else pnTalleres(v);
       vista("vDuena");
     }
@@ -1237,6 +1264,42 @@
             if (!x.ok) throw new Error("delete");
             PN.resenas = PN.resenas.filter(function (z) { return z.id !== r.id; }); pintarPanel();
           } catch (e) { avisar("No pudimos borrarla."); }
+        }, true));
+        it.appendChild(acc);
+        caja.appendChild(it);
+      });
+      v.appendChild(caja);
+    }
+    function pnPedidos(v) {
+      const caja = el("div", "caja");
+      caja.appendChild(el("p", "ayuda", "Acá llegan los pedidos del botón de arrepentimiento y de baja. Tenés que responderles y, si corresponde, devolver el dinero desde Mercado Pago y tocar “Reembolsar” en la ficha de la alumna (eso le corta el acceso)."));
+      if (!PN.pedidos.length) caja.appendChild(el("p", "ayuda", "Todavía no hay pedidos."));
+      PN.pedidos.forEach(function (p) {
+        const it = el("article", "pn-taller");
+        const cab = el("div", "pn-cab");
+        cab.appendChild(el("h3", "", p.codigo));
+        cab.appendChild(el("span", "pn-tag " + (p.estado === "recibido" ? "aviso" : "ok"), p.estado === "recibido" ? "Por resolver" : "Resuelto"));
+        it.appendChild(cab);
+        it.appendChild(el("p", "", (p.tipo === "baja" ? "Baja de servicio" : "Arrepentimiento") + " · " + p.nombre));
+        it.appendChild(el("p", "ayuda", p.email + (p.telefono ? " · " + p.telefono : "") + " · " + fechaLarga(p.creado)));
+        if (p.referencia) it.appendChild(el("p", "", "Compró: " + p.referencia));
+        if (p.mensaje) it.appendChild(el("p", "", "“" + p.mensaje + "”"));
+        if (p.nota) it.appendChild(el("p", "ayuda", "Nota: " + p.nota));
+        const acc = el("div", "pn-acc");
+        const tel = String(p.telefono || "").replace(/\D/g, "");
+        if (tel.length >= 8) {
+          const a = el("a", "btn btn-borde btn-chico", "Escribirle por WhatsApp");
+          a.href = "https://wa.me/" + (tel.length <= 10 ? "549" + tel.replace(/^0/, "") : tel) + "?text=" + encodeURIComponent("Hola " + p.nombre + "! Recibimos tu pedido " + p.codigo + ".");
+          a.target = "_blank"; a.rel = "noopener"; acc.appendChild(a);
+        }
+        if (p.estado === "recibido") acc.appendChild(boton("Marcar como resuelto", async function () {
+          const nota = prompt("Nota para vos (opcional). Por ejemplo: “Devuelto por Mercado Pago el 20/11”.", "");
+          if (nota === null) return;
+          try {
+            const r = await rpc("arrepentimiento_resolver", { p_id: p.id, p_nota: nota });
+            if (!r || !r.ok) throw new Error("resolver");
+            p.estado = "resuelto"; p.nota = nota || null; pintarPanel();
+          } catch (e) { avisar("No pudimos marcarlo."); }
         }, true));
         it.appendChild(acc);
         caja.appendChild(it);
