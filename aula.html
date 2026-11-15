@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0c">
+  <!-- Política de contenido: la página solo puede hablar con Supabase y cargar video de los reproductores permitidos.
+       Si un script ajeno se colara, no podría mandar la sesión a otro sitio. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob: https://kpmqesvijwgfthixetcx.supabase.co; connect-src 'self' https://kpmqesvijwgfthixetcx.supabase.co; frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://drive.google.com https://iframe.mediadelivery.net; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="robots" content="noindex">
+  <title>Aula | Innova Nails</title>
+  <meta name="description" content="Aula online de Innova Nails: talleres en video, a tu ritmo.">
+  <link rel="icon" type="image/png" href="assets/images/brand/nena-icono.png">
+  <link rel="apple-touch-icon" href="assets/images/brand/nena-icono.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://kpmqesvijwgfthixetcx.supabase.co" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@400;500;600&family=Licorice&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============ COLORES Y TIPOGRAFÍAS (las mismas que la página principal) ============ */
+    :root {
+      --marfil: #0a0a0c; --lino: #111111; --arena: #1c1c1c; --camel: #d8b86e; --oro-fino: #b8944f;
+      --bronce: #e2c07a; --cafe: #ece6da; --suave: #b3ada3; --apagado: #a39e96; --tinta: #f6f3ee; --papel: #121212;
+      --linea: rgba(216, 184, 110, .20); --linea-2: rgba(216, 184, 110, .42);
+      --ok: #7fcf95; --rojo: #f08a7c; --naranja: #e8b25c;
+      --display: 'Cormorant Garamond', 'Garamond', 'Times New Roman', Georgia, serif;
+      --sans: 'Jost', 'Helvetica Neue', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+      --lado: clamp(18px, 5vw, 48px);
+      --suave-e: cubic-bezier(.2, .7, .2, 1);
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html { -webkit-text-size-adjust: 100%; color-scheme: dark; }
+    body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; font-family: var(--sans); font-size: 16px; line-height: 1.65; background: var(--marfil); color: var(--cafe); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    h1, h2, h3 { margin: 0; font-family: var(--display); font-weight: 400; line-height: 1.1; color: var(--tinta); }
+    a { color: inherit; }
+    button { font-family: inherit; }
+    :focus-visible { outline: 2px solid var(--tinta); outline-offset: 3px; }
+    .wrap { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 var(--lado); }
+    .eyebrow { display: inline-flex; align-items: center; gap: 14px; font: 500 11.5px/1.2 var(--sans); letter-spacing: .32em; text-transform: uppercase; color: var(--bronce); }
+    .eyebrow::before { content: ""; width: 28px; height: 1px; background: currentColor; opacity: .7; }
+
+    /* Botones */
+    .btn { --alto: 52px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: var(--alto); padding: 0 30px; border: 1px solid var(--tinta); border-radius: 0; background: var(--tinta); color: var(--marfil); font: 500 12px/1.3 var(--sans); letter-spacing: .24em; text-transform: uppercase; text-decoration: none; cursor: pointer; text-align: center; transition: background .4s var(--suave-e), color .4s var(--suave-e), border-color .4s var(--suave-e); -webkit-tap-highlight-color: transparent; }
+    .btn:hover { background: transparent; color: var(--tinta); }
+    .btn-borde { background: transparent; color: var(--tinta); border-color: var(--linea-2); }
+    .btn-borde:hover { background: var(--tinta); color: var(--marfil); border-color: var(--tinta); }
+    .btn-chico { --alto: 40px; padding: 0 18px; font-size: 10.5px; }
+    .btn-bloque { width: 100%; }
+    .btn:disabled { background: var(--arena); color: var(--suave); border-color: var(--arena); cursor: not-allowed; }
+    .link { background: none; border: 0; padding: 0; color: var(--bronce); text-decoration: underline; cursor: pointer; font: inherit; }
+
+    /* Barra superior */
+    .top { position: sticky; top: 0; z-index: 20; background: rgba(10, 10, 12, .92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--linea); }
+    .top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 64px; }
+    .marca { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; font: 500 14px var(--sans); letter-spacing: .26em; text-transform: uppercase; color: var(--tinta); }
+    .marca img { width: 34px; height: 34px; object-fit: contain; }
+    .nav-sesion { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: flex-end; font-size: 14px; }
+    .nav-sesion .quien { color: var(--suave); max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    main { flex: 1; padding: clamp(36px, 6vw, 80px) 0; }
+    .vista h1 { font-size: clamp(38px, 6vw, 68px); letter-spacing: -.012em; margin: 14px 0 12px; text-wrap: balance; }
+    .vista h1 em { font-style: italic; color: var(--bronce); }
+    .bajada { margin: 0 0 28px; color: var(--cafe); max-width: 620px; font-size: 17px; line-height: 1.75; }
+    .caja { background: var(--papel); border: 1px solid var(--linea); padding: clamp(22px, 4vw, 40px); }
+    .angosto { max-width: 520px; margin: 0 auto; }
+
+    /* Formularios */
+    .campo { display: block; margin-bottom: 18px; }
+    .campo > span { display: block; font: 500 11px var(--sans); letter-spacing: .24em; text-transform: uppercase; color: var(--cafe); margin-bottom: 4px; }
+    .input { width: 100%; height: 52px; padding: 0 2px; border: 0; border-bottom: 1px solid var(--linea-2); border-radius: 0; background: transparent; color: var(--tinta); font: 400 17px var(--sans); transition: border-color .3s, box-shadow .3s; -webkit-appearance: none; appearance: none; }
+    .input::placeholder { color: var(--apagado); }
+    .input:focus { outline: none; border-bottom-color: var(--tinta); box-shadow: 0 1px 0 0 var(--tinta); }
+    .ayuda { font-size: 13.5px; color: var(--suave); margin: 6px 0 0; line-height: 1.55; }
+    .tabs { display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 26px; border-bottom: 1px solid var(--linea); }
+    .tab { padding: 14px 8px; background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; color: var(--suave); font: 500 12px var(--sans); letter-spacing: .22em; text-transform: uppercase; cursor: pointer; }
+    .tab[aria-selected="true"] { color: var(--tinta); border-bottom-color: var(--bronce); }
+    .aviso { margin: 0 0 20px; padding: 14px 16px; border: 1px solid var(--linea-2); background: rgba(216, 184, 110, .06); font-size: 15px; line-height: 1.6; }
+    .aviso.mal { border-color: rgba(240, 138, 124, .5); background: rgba(240, 138, 124, .07); }
+    .aviso.bien { border-color: rgba(127, 207, 149, .5); background: rgba(127, 207, 149, .07); }
+
+    /* Tarjetas de talleres */
+    .grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; margin-top: 28px; }
+    @media (min-width: 760px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    .card { display: flex; flex-direction: column; background: var(--papel); border: 1px solid var(--linea); }
+    .portada { aspect-ratio: 16 / 10; background: var(--arena); display: grid; place-items: center; overflow: hidden; }
+    .portada img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .portada.vacia::before { content: ""; width: 34px; height: 34px; background: var(--oro-fino); clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); }
+    .card-info { display: flex; flex-direction: column; gap: 12px; padding: 22px 22px 24px; flex: 1; }
+    .card-info h3 { font-size: clamp(24px, 2.6vw, 30px); overflow-wrap: anywhere; }
+    .card-info p { margin: 0; color: var(--cafe); font-size: 15.5px; }
+    .card-pie { margin-top: auto; padding-top: 14px; display: grid; gap: 12px; }
+    .etiqueta { font: 500 11px var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--suave); }
+    .barra { height: 6px; background: var(--arena); overflow: hidden; }
+    .barra > i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--oro-fino), var(--bronce)); transition: width .6s var(--suave-e); }
+    h2.sub { font-size: clamp(28px, 3.4vw, 40px); margin: 44px 0 4px; }
+
+    /* Detalle de un taller */
+    .detalle { display: grid; gap: 32px; margin-top: 28px; }
+    @media (min-width: 900px) { .detalle { grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); align-items: start; } }
+    .precio { font: 400 clamp(34px, 5vw, 50px)/1 var(--display); color: var(--tinta); font-variant-numeric: lining-nums; }
+    .temario { margin: 0; padding: 0; list-style: none; counter-reset: l; }
+    .temario li { counter-increment: l; display: flex; gap: 14px; padding: 13px 0; border-bottom: 1px solid var(--linea); font-size: 15.5px; }
+    .temario li::before { content: counter(l, decimal-leading-zero); font: 400 16px/1.5 var(--display); color: var(--bronce); min-width: 26px; }
+    .temario small { margin-left: auto; color: var(--suave); white-space: nowrap; }
+    .incluye { margin: 18px 0 22px; padding: 0; list-style: none; display: grid; gap: 8px; font-size: 15px; }
+    .incluye li::before { content: "✦"; color: var(--bronce); margin-right: 10px; }
+
+    /* Aula */
+    .aula { display: grid; gap: 28px; margin-top: 22px; }
+    @media (min-width: 960px) { .aula { grid-template-columns: minmax(0, 1.55fr) minmax(300px, .75fr); align-items: start; } }
+    .video { position: relative; aspect-ratio: 16 / 9; background: #000; border: 1px solid var(--linea); display: grid; place-items: center; text-align: center; padding: 20px; }
+    .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .leccion-cab { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: center; justify-content: space-between; margin: 22px 0 6px; }
+    .leccion-cab h2 { font-size: clamp(26px, 3.2vw, 36px); }
+    .texto-leccion { white-space: pre-line; color: var(--cafe); font-size: 16px; line-height: 1.75; margin: 10px 0 0; }
+    .marca-agua { position: absolute; z-index: 3; left: 5%; top: 8%; max-width: 90%; overflow: hidden; text-overflow: ellipsis; pointer-events: none; user-select: none; -webkit-user-select: none; white-space: nowrap; color: rgba(255, 255, 255, .38); font: 600 13px/1 var(--sans); letter-spacing: .02em; text-shadow: 0 0 3px rgba(0, 0, 0, .75); animation: marcaMover 48s linear infinite; }
+    @keyframes marcaMover { 0%, 100% { left: 5%; top: 8%; } 25% { left: 45%; top: 14%; } 50% { left: 20%; top: 80%; } 75% { left: 50%; top: 52%; } }
+    @media (prefers-reduced-motion: reduce) { .marca-agua { animation: none; } }
+    .video video { width: 100%; height: 100%; display: block; background: #000; }
+    .materiales { margin: 26px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+    .lista-lecc { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--linea); }
+    .lista-lecc button { width: 100%; display: flex; align-items: center; gap: 14px; text-align: left; padding: 15px 4px; background: none; border: 0; border-bottom: 1px solid var(--linea); color: var(--cafe); font: 400 15.5px/1.4 var(--sans); cursor: pointer; }
+    .lista-lecc button:hover { background: rgba(216, 184, 110, .05); }
+    .lista-lecc button[aria-current="true"] { background: rgba(216, 184, 110, .09); color: var(--tinta); }
+    .tilde { width: 22px; height: 22px; flex-shrink: 0; border: 1px solid var(--linea-2); display: grid; place-items: center; font-size: 13px; color: var(--marfil); }
+    .tilde.hecha { background: var(--ok); border-color: var(--ok); }
+    .lista-lecc small { margin-left: auto; color: var(--suave); white-space: nowrap; }
+    .progreso-cab { display: grid; gap: 10px; margin: 18px 0 4px; max-width: 560px; }
+    .progreso-cab .fila { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; color: var(--suave); }
+
+    /* Certificado */
+    .cert-hoja { max-width: 820px; margin: 0 auto; padding: clamp(34px, 6vw, 72px) clamp(22px, 5vw, 64px); text-align: center; background: var(--papel); border: 1px solid var(--linea-2); outline: 1px solid var(--linea); outline-offset: -12px; }
+    .cert-hoja .marca-cert { font: 500 13px var(--sans); letter-spacing: .4em; text-transform: uppercase; color: var(--bronce); }
+    .cert-hoja h1 { font-size: clamp(34px, 6vw, 60px); margin: 22px 0 8px; }
+    .cert-hoja .nombre { font: italic 400 clamp(34px, 6vw, 56px)/1.15 var(--display); color: var(--bronce); margin: 18px 0; overflow-wrap: anywhere; }
+    .cert-hoja .curso-cert { font: 400 clamp(24px, 4vw, 36px)/1.2 var(--display); color: var(--tinta); margin: 12px 0 30px; overflow-wrap: anywhere; }
+    .cert-hoja .pie-cert { margin-top: 34px; font-size: 13.5px; color: var(--suave); line-height: 1.7; overflow-wrap: anywhere; }
+    .acciones { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 24px; }
+
+    footer { border-top: 1px solid var(--linea); padding: 26px 0 34px; text-align: center; font-size: 14px; color: var(--suave); }
+    footer a { color: var(--bronce); }
+    .toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px); opacity: 0; pointer-events: none; z-index: 60; max-width: min(92vw, 440px); padding: 14px 20px; background: var(--tinta); color: var(--marfil); font-size: 15px; transition: opacity .3s, transform .3s; }
+    .toast.ver { opacity: 1; transform: translate(-50%, 0); }
+    .girando { display: inline-block; width: 22px; height: 22px; border: 2px solid var(--linea-2); border-top-color: var(--bronce); border-radius: 50%; animation: gira .8s linear infinite; vertical-align: middle; margin-right: 10px; }
+    @keyframes gira { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+    /* Panel de la dueña */
+    .pn-sub { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 22px; }
+    .pn-sub .btn { flex: 1 1 0; min-width: 110px; }
+    .pn-sub .btn[aria-pressed="true"] { background: var(--tinta); color: var(--marfil); border-color: var(--tinta); }
+    .pn-buscar { margin: 0 0 14px; }
+    .pn-fila { display: flex; justify-content: space-between; align-items: center; width: 100%; text-align: left; padding: 16px 4px; background: none; border: 0; border-bottom: 1px solid var(--linea); color: var(--tinta); font: 500 17px var(--sans); cursor: pointer; min-height: 56px; }
+    .pn-fila span { color: var(--bronce); font-size: 24px; line-height: 1; }
+    .pn-fila:hover { background: rgba(176, 138, 74, .07); }
+    .pn-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 0 0 22px; }
+    @media (min-width: 760px) { .pn-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+    .pn-stat { border: 1px solid var(--linea); padding: 14px 14px 12px; background: var(--papel); }
+    .pn-stat small { display: block; font: 500 10.5px var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--suave); }
+    .pn-stat strong { display: block; font: 400 32px/1.15 var(--display); color: var(--tinta); margin-top: 4px; }
+    .pn-taller { border: 1px solid var(--linea); padding: 16px; margin: 0 0 14px; background: var(--papel); }
+    .pn-taller h3 { margin: 0 0 8px; font: 500 19px var(--display); }
+    .pn-taller p { margin: 6px 0 0; font-size: 14.5px; color: var(--cafe); line-height: 1.55; }
+    .pn-cab { display: flex; justify-content: space-between; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .pn-tag { font: 600 10.5px var(--sans); letter-spacing: .14em; text-transform: uppercase; padding: 3px 8px; border: 1px solid var(--linea-2); }
+    .pn-tag.ok { color: #1f7a3d; border-color: #1f7a3d; }
+    .pn-tag.mal { color: #9c2f22; border-color: #9c2f22; }
+    .pn-tag.aviso { color: #8a6416; border-color: #8a6416; }
+    .pn-volver { background: none; border: 0; padding: 6px 0; margin: 0 0 8px; color: var(--bronce); font: 500 14px var(--sans); cursor: pointer; }
+    .pn-acc { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+    .pn-nota-mal { margin-top: 8px; color: #9c2f22; font-size: 14px; }
+    .pn-tabla { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+    .pn-tabla th, .pn-tabla td { text-align: left; padding: 9px 6px; border-bottom: 1px solid var(--linea); }
+    .pn-tabla th { font: 500 10.5px var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--suave); }
+    /* Reseñas */
+    .estrellas { color: var(--bronce); letter-spacing: .12em; font-size: 18px; white-space: nowrap; }
+    .valoracion { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 6px 0 8px; }
+    .valoracion strong { font: 400 36px/1 var(--display); color: var(--tinta); }
+    .resena { padding: 16px 0; border-bottom: 1px solid var(--linea); }
+    .resena p { margin: 8px 0 0; color: var(--cafe); font-size: 15.5px; line-height: 1.65; overflow-wrap: anywhere; }
+    .quien-r { display: flex; gap: 6px 14px; align-items: baseline; flex-wrap: wrap; font-size: 14px; color: var(--suave); }
+    .quien-r strong { color: var(--tinta); font-weight: 500; }
+    .estrellas-input { display: flex; gap: 2px; margin: 2px 0 14px; }
+    .estrellas-input button { background: none; border: 0; padding: 0; min-width: 46px; min-height: 46px; font-size: 34px; line-height: 1; color: var(--linea-2); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .estrellas-input button.on { color: var(--bronce); }
+    textarea.input { height: auto; min-height: 104px; padding: 12px 2px; resize: vertical; line-height: 1.6; }
+    .foto-resena { display: block; width: 100%; max-width: 220px; aspect-ratio: 4 / 5; object-fit: cover; margin-top: 12px; border: 1px solid var(--linea); }
+    .resp-dueña { margin-top: 12px; padding: 10px 14px; border-left: 2px solid var(--bronce); background: rgba(176,138,74,.08); font-size: 14.5px; }
+    .resp-dueña strong { font-weight: 500; color: var(--tinta); }
+    .resp-dueña p { margin: 4px 0 0; }
+    .caja-resena { margin-top: 44px; }
+    .caja-resena h2 { font-size: clamp(26px, 3vw, 34px); margin-bottom: 8px; }
+
+    @media print {
+      body { background: #fff; color: #000; }
+      .top, footer, .acciones, .toast { display: none !important; }
+      main { padding: 0; }
+      .cert-hoja { background: #fff; border: 2px solid #b8944f; outline-color: #b8944f; }
+      .cert-hoja, .cert-hoja * { color: #000 !important; }
+      .cert-hoja .nombre, .cert-hoja .marca-cert { color: #8a6a28 !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <a class="marca" href="index.html" aria-label="Volver a la página de Innova Nails">
+        <img src="assets/images/brand/nena-icono.png" alt="" width="34" height="34">
+        <span>Innova Nails</span>
+      </a>
+      <div class="nav-sesion" id="navSesion"></div>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <noscript><p class="aviso mal">Para usar el aula necesitás tener JavaScript activado en tu navegador.</p></noscript>
+
+      <!-- Cargando -->
+      <section class="vista" id="vCarga" aria-live="polite"><p><span class="girando"></span><span id="cargaTexto">Cargando...</span></p></section>
+
+      <!-- Ingresar / crear cuenta -->
+      <section class="vista" id="vAuth" hidden>
+        <div class="angosto">
+          <span class="eyebrow">Aula online</span>
+          <h1 id="authTitulo">Tu <em>aula</em></h1>
+          <p class="bajada" id="authBajada">Ingresá con tu usuario y contraseña para ver tus talleres.</p>
+          <div class="caja">
+            <div class="aviso" id="authAviso" hidden role="status"></div>
+            <div class="tabs" role="tablist">
+              <button class="tab" role="tab" id="tabIngresar" type="button" aria-selected="true">Ingresar</button>
+              <button class="tab" role="tab" id="tabRegistro" type="button" aria-selected="false">Crear cuenta</button>
+            </div>
+            <form id="formAuth" novalidate>
+              <label class="campo" id="campoNombre" hidden><span>Nombre y apellido</span><input class="input" id="aNombre" autocomplete="name" maxlength="60"></label>
+              <label class="campo" id="campoTel" hidden><span>WhatsApp (con código de área)</span><input class="input" id="aTel" type="tel" inputmode="numeric" autocomplete="tel" maxlength="20" placeholder="387 123 4567"></label>
+              <label class="campo"><span>Email</span><input class="input" id="aEmail" type="email" autocomplete="username" maxlength="120" required></label>
+              <label class="campo"><span>Contraseña</span><input class="input" id="aPass" type="password" autocomplete="current-password" minlength="8" maxlength="72" required>
+                <p class="ayuda" id="ayudaPass" hidden>Mínimo 8 caracteres.</p></label>
+              <button class="btn btn-bloque" id="btnAuth" type="submit">Ingresar</button>
+              <p class="ayuda" style="text-align:center;margin-top:18px"><button class="link" id="btnOlvide" type="button">Olvidé mi contraseña</button></p>
+            </form>
+          </div>
+          <p class="ayuda" style="text-align:center;margin-top:20px"><a href="index.html#talleres">Ver los talleres disponibles</a></p>
+        </div>
+      </section>
+
+      <!-- Completar datos (si entró con una cuenta sin ficha) -->
+      <section class="vista" id="vFicha" hidden>
+        <div class="angosto">
+          <span class="eyebrow">Un último paso</span>
+          <h1>Completá tus <em>datos</em></h1>
+          <p class="bajada">Los usamos solo para avisarte sobre tu taller.</p>
+          <form class="caja" id="formFicha" novalidate>
+            <label class="campo"><span>Nombre y apellido</span><input class="input" id="fNombre" autocomplete="name" maxlength="60" required></label>
+            <label class="campo"><span>WhatsApp (con código de área)</span><input class="input" id="fTel" type="tel" inputmode="numeric" autocomplete="tel" maxlength="20" placeholder="387 123 4567"></label>
+            <button class="btn btn-bloque" type="submit">Continuar</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Nueva contraseña (después del link de recuperación) -->
+      <section class="vista" id="vClave" hidden>
+        <div class="angosto">
+          <span class="eyebrow">Recuperar acceso</span>
+          <h1>Nueva <em>contraseña</em></h1>
+          <form class="caja" id="formClave" novalidate>
+            <label class="campo"><span>Contraseña nueva</span><input class="input" id="cPass" type="password" autocomplete="new-password" minlength="8" maxlength="72" required><p class="ayuda">Mínimo 8 caracteres.</p></label>
+            <button class="btn btn-bloque" type="submit">Guardar contraseña</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Detalle de un taller (público) -->
+      <section class="vista" id="vDetalle" hidden></section>
+
+      <!-- Mis talleres -->
+      <section class="vista" id="vMis" hidden></section>
+      <section class="vista" id="vDuena" hidden></section>
+
+      <!-- Aula de un taller -->
+      <section class="vista" id="vAula" hidden></section>
+
+      <!-- Certificado -->
+      <section class="vista" id="vCert" hidden></section>
+
+      <!-- Mensajes sueltos (pago, errores) -->
+      <section class="vista" id="vMensaje" hidden></section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span id="pieNegocio">Innova Nails</span> · <a id="pieWa" href="#" target="_blank" rel="noopener" hidden>Escribinos por WhatsApp</a>
+    </div>
+  </footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    // ===== CONEXIÓN CON LA BASE DE DATOS (la misma que la página principal) =====
+    const SUPABASE_URL = "https://kpmqesvijwgfthixetcx.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_-HEFq0BXXVAxEDTFJUoi_w_0TZ9DFKH";
+    const SITIO = "https://innovanails.github.io/";
+    // Texto de la política de devolución que se muestra antes de pagar (cambialo si Nena cambia la política)
+    const POLITICA_DEVOLUCION = "Si no es lo que esperabas, podés pedir la devolución dentro de las 24 hs de la compra escribiéndonos por WhatsApp.";
+    // Claves propias del aula (distintas a las del panel, para que no se pisen las sesiones)
+    const K_TOKEN = "aula_token", K_REFRESCO = "aula_refresco", K_FICHA = "aula_ficha_pendiente";
+
+    const $ = id => document.getElementById(id);
+    const plata = n => "$" + Number(n).toLocaleString("es-AR");
+    function el(tag, clase, texto) {
+      const e = document.createElement(tag);
+      if (clase) e.className = clase;
+      if (texto != null) e.textContent = texto;
+      return e;
+    }
+    function fechaLarga(iso) {
+      const d = new Date(iso);
+      return isNaN(d) ? "" : d.toLocaleDateString("es-AR", { day: "numeric", month: "long", year: "numeric" });
+    }
+    function duracion(dias) {
+      dias = Number(dias);
+      if (dias >= 30 && dias % 30 === 0) { const m = dias / 30; return m + (m === 1 ? " mes" : " meses"); }
+      return dias + " días";
+    }
+    let tToast = null;
+    function avisar(txt) {
+      const t = $("toast");
+      t.textContent = txt;
+      t.classList.add("ver");
+      clearTimeout(tToast);
+      tToast = setTimeout(function () { t.classList.remove("ver"); }, 4200);
+    }
+    function vista(id) {
+      document.querySelectorAll(".vista").forEach(function (v) { v.hidden = v.id !== id; });
+      window.scrollTo(0, 0);
+      pintarNav();
+    }
+    function cargando(txt) { $("cargaTexto").textContent = txt || "Cargando..."; vista("vCarga"); }
+
+    // ---------- Sesión ----------
+    const S = { token: null, refresco: null, volverA: null };
+    function leerJwt(t) {
+      try {
+        const p = t.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+        return JSON.parse(decodeURIComponent(escape(atob(p))));
+      } catch (e) { return {}; }
+    }
+    function emailSesion() { return S.token ? (leerJwt(S.token).email || "") : ""; }
+    function guardarSesion(d) {
+      S.token = d.access_token; S.refresco = d.refresh_token;
+      try { localStorage.setItem(K_TOKEN, S.token); localStorage.setItem(K_REFRESCO, S.refresco || ""); } catch (e) { /* sin almacenamiento: hay que entrar cada vez */ }
+    }
+    function cargarSesion() {
+      try { S.token = localStorage.getItem(K_TOKEN) || null; S.refresco = localStorage.getItem(K_REFRESCO) || null; } catch (e) { /* ignorar */ }
+    }
+    function limpiarSesion() {
+      S.token = null; S.refresco = null;
+      try { localStorage.removeItem(K_TOKEN); localStorage.removeItem(K_REFRESCO); } catch (e) { /* ignorar */ }
+    }
+    let refrescando = null;
+    async function refrescar() {
+      if (!S.refresco) return false;
+      if (!refrescando) {
+        refrescando = (async function () {
+          try {
+            const r = await fetch(SUPABASE_URL + "/auth/v1/token?grant_type=refresh_token", {
+              method: "POST",
+              headers: { "apikey": SUPABASE_KEY, "Content-Type": "application/json" },
+              body: JSON.stringify({ refresh_token: S.refresco })
+            });
+            if (!r.ok) return false;
+            guardarSesion(await r.json());
+            return true;
+          } catch (e) { return false; } finally { refrescando = null; }
+        })();
+      }
+      return refrescando;
+    }
+    // Llamada a la base: con la sesión de la alumna si la hay; si venció, la renueva una vez
+    async function api(path, o) {
+      o = o || {};
+      async function pedir() {
+        const h = { "apikey": SUPABASE_KEY };
+        if (S.token) h["Authorization"] = "Bearer " + S.token;
+        if (o.body) h["Content-Type"] = "application/json";
+        return fetch(SUPABASE_URL + path, { method: o.method || "GET", headers: h, body: o.body });
+      }
+      let r = await pedir();
+      if (r.status === 401 && S.token) {
+        if (await refrescar()) r = await pedir();
+        else { limpiarSesion(); pintarNav(); }
+      }
+      return r;
+    }
+    async function rpc(nombre, datos) {
+      const r = await api("/rest/v1/rpc/" + nombre, { method: "POST", body: JSON.stringify(datos || {}) });
+      if (!r.ok) throw new Error("Error " + r.status);
+      return r.json();
+    }
+    async function leer(path) {
+      const r = await api(path);
+      if (!r.ok) throw new Error("Error " + r.status);
+      return r.json();
+    }
+
+    function pintarNav() {
+      const n = $("navSesion");
+      n.replaceChildren();
+      if (S.token) {
+        n.appendChild(el("span", "quien", emailSesion()));
+        if (S.duena) {
+          const pn = el("button", "btn btn-chico", "Panel de Nena");
+          pn.type = "button"; pn.onclick = irPanel;
+          n.appendChild(pn);
+        }
+        const mis = el("button", "btn btn-borde btn-chico", "Mis talleres");
+        mis.type = "button"; mis.onclick = irMis;
+        const salir = el("button", "link", "Salir");
+        salir.type = "button"; salir.onclick = cerrarSesion;
+        n.appendChild(mis); n.appendChild(salir);
+      } else {
+        const ing = el("button", "btn btn-borde btn-chico", "Ingresar");
+        ing.type = "button"; ing.onclick = function () { mostrarAuth("ingresar"); };
+        n.appendChild(ing);
+      }
+    }
+    async function cerrarSesion() {
+      try { await api("/auth/v1/logout", { method: "POST", body: "{}" }); } catch (e) { /* ignorar */ }
+      limpiarSesion();
+      history.replaceState(null, "", "aula.html");
+      mostrarAuth("ingresar");
+    }
+
+    // ---------- Ingresar, crear cuenta, recuperar ----------
+    let modoAuth = "ingresar";
+    function mostrarAuth(modo, mensaje) {
+      modoAuth = modo;
+      const reg = modo === "registro";
+      $("tabIngresar").setAttribute("aria-selected", reg ? "false" : "true");
+      $("tabRegistro").setAttribute("aria-selected", reg ? "true" : "false");
+      $("campoNombre").hidden = !reg; $("campoTel").hidden = !reg; $("ayudaPass").hidden = !reg;
+      $("aPass").autocomplete = reg ? "new-password" : "current-password";
+      $("btnAuth").textContent = reg ? "Crear mi cuenta" : "Ingresar";
+      $("btnOlvide").hidden = reg;
+      $("authTitulo").replaceChildren(document.createTextNode(reg ? "Creá tu " : "Tu "), el("em", "", reg ? "cuenta" : "aula"));
+      $("authBajada").textContent = reg
+        ? "Con tu cuenta comprás el taller y entrás cuando quieras, desde cualquier dispositivo."
+        : "Ingresá con tu usuario y contraseña para ver tus talleres.";
+      const a = $("authAviso");
+      a.hidden = !mensaje;
+      a.className = "aviso" + (mensaje && mensaje.tipo ? " " + mensaje.tipo : "");
+      a.textContent = mensaje ? mensaje.texto : "";
+      vista("vAuth");
+    }
+    $("tabIngresar").onclick = function () { mostrarAuth("ingresar"); };
+    $("tabRegistro").onclick = function () { mostrarAuth("registro"); };
+
+    function textoErrorAuth(d) {
+      const c = String((d && (d.error_code || d.msg || d.error_description || d.error)) || "").toLowerCase();
+      if (c.indexOf("invalid_credentials") !== -1 || c.indexOf("invalid login") !== -1) return "El email o la contraseña no son correctos.";
+      if (c.indexOf("email_not_confirmed") !== -1 || c.indexOf("not confirmed") !== -1) return "Todavía falta confirmar tu email: revisá tu bandeja (y el spam) y tocá el link que te enviamos.";
+      if (c.indexOf("user_already_exists") !== -1 || c.indexOf("already registered") !== -1) return "Ese email ya tiene una cuenta. Probá ingresando.";
+      if (c.indexOf("weak_password") !== -1 || c.indexOf("password") !== -1) return "La contraseña es muy débil. Usá al menos 8 caracteres.";
+      if (c.indexOf("over_email_send_rate_limit") !== -1 || c.indexOf("rate") !== -1) return "Hubo muchos intentos seguidos. Esperá unos minutos y probá de nuevo.";
+      return "No pudimos completar la operación. Probá de nuevo en un momento.";
+    }
+    const emailValido = e => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e);
+
+    $("formAuth").addEventListener("submit", async function (ev) {
+      ev.preventDefault();
+      const email = $("aEmail").value.trim().toLowerCase(), pass = $("aPass").value;
+      const nombre = $("aNombre").value.trim(), tel = $("aTel").value.replace(/\D/g, "");
+      const reg = modoAuth === "registro";
+      const aviso = function (texto, tipo) { const a = $("authAviso"); a.hidden = false; a.className = "aviso " + (tipo || "mal"); a.textContent = texto; };
+      if (!emailValido(email)) return aviso("Revisá el email: no parece estar completo.");
+      if (reg) {
+        if (nombre.length < 2) return aviso("Escribí tu nombre y apellido.");
+        if (tel.length < 8) return aviso("Escribí tu WhatsApp con código de área, solo números.");
+        if (pass.length < 8) return aviso("La contraseña tiene que tener al menos 8 caracteres.");
+      } else if (!pass) return aviso("Escribí tu contraseña.");
+
+      const btn = $("btnAuth");
+      btn.disabled = true;
+      try {
+        if (reg) {
+          try { localStorage.setItem(K_FICHA, JSON.stringify({ email: email, nombre: nombre, tel: tel })); } catch (e) { /* ignorar */ }
+          // El destino del link de confirmación va en la dirección (?redirect_to=...): Supabase no lo lee del cuerpo del pedido
+          const r = await fetch(SUPABASE_URL + "/auth/v1/signup?redirect_to=" + encodeURIComponent(SITIO + "aula.html"), {
+            method: "POST",
+            headers: { "apikey": SUPABASE_KEY, "Content-Type": "application/json" },
+            body: JSON.stringify({ email: email, password: pass, data: { nombre: nombre } })
+          });
+          const d = await r.json().catch(function () { return {}; });
+          if (!r.ok) return aviso(textoErrorAuth(d));
+          if (d.access_token) { guardarSesion(d); return await despuesDeIngresar(); }
+          // Supabase pide confirmar el email antes de dejar entrar
+          mostrarAuth("ingresar", { tipo: "bien", texto: "Te enviamos un email para confirmar tu cuenta. Tocá el link y después ingresá con tu email y contraseña." });
+          $("aEmail").value = email;
+          return;
+        }
+        const r = await fetch(SUPABASE_URL + "/auth/v1/token?grant_type=password", {
+          method: "POST",
+          headers: { "apikey": SUPABASE_KEY, "Content-Type": "application/json" },
+          body: JSON.stringify({ email: email, password: pass })
+        });
+        const d = await r.json().catch(function () { return {}; });
+        if (!r.ok || !d.access_token) return aviso(textoErrorAuth(d));
+        guardarSesion(d);
+        await despuesDeIngresar();
+      } catch (e) {
+        aviso("No pudimos conectarnos. Revisá tu internet y probá de nuevo.");
+      } finally { btn.disabled = false; }
+    });
+
+    $("btnOlvide").onclick = async function () {
+      const email = $("aEmail").value.trim().toLowerCase();
+      const a = $("authAviso");
+      a.hidden = false;
+      if (!emailValido(email)) { a.className = "aviso mal"; a.textContent = "Escribí tu email arriba y volvé a tocar “Olvidé mi contraseña”."; return; }
+      try {
+        // El link para crear la contraseña nueva tiene que volver al aula (no a la página principal): va en ?redirect_to=...
+        await fetch(SUPABASE_URL + "/auth/v1/recover?redirect_to=" + encodeURIComponent(SITIO + "aula.html"), {
+          method: "POST",
+          headers: { "apikey": SUPABASE_KEY, "Content-Type": "application/json" },
+          body: JSON.stringify({ email: email })
+        });
+      } catch (e) { /* se muestra el mismo mensaje: no revelamos si el email existe */ }
+      a.className = "aviso bien";
+      a.textContent = "Si ese email tiene una cuenta, te enviamos un link para crear una contraseña nueva.";
+    };
+
+    $("formClave").addEventListener("submit", async function (ev) {
+      ev.preventDefault();
+      const p = $("cPass").value;
+      if (p.length < 8) return avisar("La contraseña tiene que tener al menos 8 caracteres.");
+      const r = await api("/auth/v1/user", { method: "PUT", body: JSON.stringify({ password: p }) });
+      if (!r.ok) return avisar("No pudimos guardar la contraseña. Pedí un link nuevo y probá de nuevo.");
+      avisar("Listo, tu contraseña quedó guardada.");
+      $("cPass").value = "";
+      await despuesDeIngresar();
+    });
+
+    // Ficha de la alumna (nombre y WhatsApp)
+    async function asegurarFicha() {
+      let filas;
+      try { filas = await leer("/rest/v1/alumnas?select=user_id&limit=1"); } catch (e) { return true; }
+      if (filas.length) return true;
+      let pend = null;
+      try { pend = JSON.parse(localStorage.getItem(K_FICHA) || "null"); } catch (e) { /* ignorar */ }
+      if (pend && pend.email === emailSesion().toLowerCase() && pend.nombre) {
+        try {
+          const r = await rpc("alumna_guardar", { p_nombre: pend.nombre, p_telefono: pend.tel || "" });
+          if (r && r.ok) { try { localStorage.removeItem(K_FICHA); } catch (e) { /* ignorar */ } return true; }
+        } catch (e) { /* cae al formulario */ }
+      }
+      vista("vFicha");
+      return false;
+    }
+    $("formFicha").addEventListener("submit", async function (ev) {
+      ev.preventDefault();
+      const nombre = $("fNombre").value.trim(), tel = $("fTel").value.replace(/\D/g, "");
+      if (nombre.length < 2) return avisar("Escribí tu nombre y apellido.");
+      try {
+        const r = await rpc("alumna_guardar", { p_nombre: nombre, p_telefono: tel });
+        if (!r || !r.ok) return avisar("Revisá los datos e intentá de nuevo.");
+      } catch (e) { return avisar("No pudimos guardar tus datos. Probá de nuevo."); }
+      await despuesDeIngresar();
+    });
+
+    async function despuesDeIngresar() {
+      history.replaceState(null, "", location.pathname + location.search);
+      cargando("Entrando a tu aula...");
+      if (!(await asegurarFicha())) return;
+      if (S.volverA) { const s = S.volverA; S.volverA = null; return mostrarDetalle(s); }
+      irMis();
+    }
+
+    // ---------- Datos del negocio (nombre y WhatsApp para el pie) ----------
+    let NEGOCIO = null;
+    async function cargarNegocio() {
+      try {
+        const r = await fetch(SUPABASE_URL + "/rest/v1/rpc/datos_publicos", {
+          method: "POST", headers: { "apikey": SUPABASE_KEY, "Content-Type": "application/json" }, body: "{}"
+        });
+        if (!r.ok) return;
+        const d = await r.json();
+        NEGOCIO = d && d.ajustes ? d.ajustes : null;
+        if (NEGOCIO && NEGOCIO.nombre) $("pieNegocio").textContent = NEGOCIO.nombre;
+        if (NEGOCIO && /^\d{8,15}$/.test(String(NEGOCIO.whatsapp || ""))) {
+          $("pieWa").href = "https://wa.me/" + NEGOCIO.whatsapp + "?text=" + encodeURIComponent("Hola! Te escribo por los talleres online.");
+          $("pieWa").hidden = false;
+        }
+      } catch (e) { /* el pie queda simple */ }
+    }
+
+    // ---------- Piezas de pantalla ----------
+    function tarjetaPortada(url) {
+      const p = el("div", "portada");
+      if (/^(https:\/\/|assets\/)/.test(url || "")) {
+        const img = document.createElement("img");
+        img.src = url; img.alt = ""; img.loading = "lazy"; img.decoding = "async";
+        img.onerror = function () { img.remove(); p.classList.add("vacia"); };
+        p.appendChild(img);
+      } else p.classList.add("vacia");
+      return p;
+    }
+    function mensaje(titulo, texto, botones) {
+      const v = $("vMensaje");
+      v.replaceChildren();
+      const c = el("div", "angosto");
+      c.appendChild(el("span", "eyebrow", "Aula online"));
+      const h = el("h1", "", titulo);
+      c.appendChild(h);
+      if (texto) c.appendChild(el("p", "bajada", texto));
+      const ac = el("div", "acciones");
+      ac.style.justifyContent = "flex-start";
+      (botones || []).forEach(function (b) { ac.appendChild(b); });
+      c.appendChild(ac);
+      v.appendChild(c);
+      vista("vMensaje");
+    }
+    function boton(texto, fn, borde) {
+      const b = el("button", "btn" + (borde ? " btn-borde" : ""), texto);
+      b.type = "button"; b.onclick = fn;
+      return b;
+    }
+
+    // ---------- Mis talleres ----------
+    let MIS = [];
+    async function misCursos() {
+      if (!S.token) return [];
+      try { MIS = await rpc("curso_mi_avance", {}); } catch (e) { MIS = []; }
+      return MIS;
+    }
+    async function irMis() {
+      if (!S.token) return mostrarAuth("ingresar");
+      history.replaceState(null, "", "aula.html");
+      cargando("Cargando tus talleres...");
+      await detectarDuena();
+      const mis = await misCursos();
+      let catalogo = [];
+      try { catalogo = await leer("/rest/v1/cursos?select=id,slug,nombre,descripcion,portada_url,precio,acceso_dias&activo=eq.true&order=orden.asc,id.asc"); } catch (e) { /* sin catálogo */ }
+
+      const v = $("vMis");
+      v.replaceChildren();
+      v.appendChild(el("span", "eyebrow", "Aula online"));
+      const h1 = el("h1", "");
+      h1.appendChild(document.createTextNode("Mis "));
+      h1.appendChild(el("em", "", "talleres"));
+      v.appendChild(h1);
+      if (S.duena) {
+        const av = el("div", "aviso");
+        av.appendChild(el("p", "", "Estás ingresando como dueña. Desde el panel ves quién compró, cómo avanza cada alumna y las opiniones."));
+        av.appendChild(boton("Abrir el panel de Nena", irPanel));
+        v.appendChild(av);
+      }
+
+      const vigentes = mis.filter(function (m) { return m.vigente; });
+      const vencidos = mis.filter(function (m) { return !m.vigente; });
+      if (!mis.length) {
+        v.appendChild(el("p", "bajada", "Todavía no tenés talleres. Cuando compres uno, aparece acá para que empieces a tu ritmo."));
+      } else {
+        v.appendChild(el("p", "bajada", "Entrá cuando quieras y seguí donde lo dejaste."));
+      }
+      const grid = el("div", "grid");
+      vigentes.concat(vencidos).forEach(function (m) {
+        const card = el("article", "card");
+        card.appendChild(tarjetaPortada(m.portada_url));
+        const info = el("div", "card-info");
+        info.appendChild(el("h3", "", m.nombre));
+        const total = Number(m.total), hechas = Number(m.hechas);
+        const pct = total ? Math.round(hechas * 100 / total) : 0;
+        if (m.vigente) {
+          const barra = el("div", "barra"); const i = el("i"); i.style.width = pct + "%"; barra.appendChild(i);
+          info.appendChild(barra);
+          info.appendChild(el("span", "etiqueta", hechas + " de " + total + " lecciones · " + pct + "%"));
+          info.appendChild(el("span", "etiqueta", "Acceso hasta el " + fechaLarga(m.vence)));
+        } else {
+          info.appendChild(el("span", "etiqueta", "Tu acceso venció el " + fechaLarga(m.vence)));
+        }
+        const pie = el("div", "card-pie");
+        if (m.vigente) pie.appendChild(boton(hechas && hechas < total ? "Continuar" : hechas >= total && total ? "Repasar" : "Empezar", function () { abrirAula(m.curso_id); }));
+        else pie.appendChild(boton("Volver a inscribirme", function () { mostrarDetalle(m.slug); }));
+        if (m.certificado) pie.appendChild(boton("Ver mi certificado", function () { verCertificado(m.certificado); }, true));
+        info.appendChild(pie);
+        card.appendChild(info);
+        grid.appendChild(card);
+      });
+      if (mis.length) v.appendChild(grid);
+
+      const idsMios = new Set(vigentes.map(function (m) { return m.curso_id; }));
+      const otros = catalogo.filter(function (c) { return !idsMios.has(c.id); });
+      if (otros.length) {
+        v.appendChild(el("h2", "sub", mis.length ? "Más talleres" : "Talleres disponibles"));
+        const g2 = el("div", "grid");
+        otros.forEach(function (c) {
+          const card = el("article", "card");
+          card.appendChild(tarjetaPortada(c.portada_url));
+          const info = el("div", "card-info");
+          info.appendChild(el("h3", "", c.nombre));
+          if (c.descripcion) info.appendChild(el("p", "", c.descripcion));
+          const pie = el("div", "card-pie");
+          pie.appendChild(el("span", "precio", plata(c.precio)));
+          pie.appendChild(boton("Ver taller", function () { mostrarDetalle(c.slug); }, true));
+          info.appendChild(pie);
+          card.appendChild(info);
+          g2.appendChild(card);
+        });
+        v.appendChild(g2);
+      }
+      vista("vMis");
+    }
+
+    // ---------- Detalle de un taller y compra ----------
+    async function mostrarDetalle(slug) {
+      cargando("Cargando el taller...");
+      S.volverA = null;
+      let c = null, temario = [];
+      try {
+        const lista = await leer("/rest/v1/cursos?select=id,slug,nombre,descripcion,portada_url,precio,acceso_dias&activo=eq.true&slug=eq." + encodeURIComponent(slug) + "&limit=1");
+        c = lista[0] || null;
+        if (c) temario = await rpc("curso_temario", { p_curso: c.id });
+      } catch (e) { c = null; }
+      if (!c) return mensaje("Este taller no está disponible", "Puede que todavía no esté abierto o que el link esté incompleto.", [boton("Ver mis talleres", irMis)]);
+
+      const mis = await misCursos();
+      const mio = mis.find(function (m) { return m.curso_id === c.id && m.vigente; });
+      let opiniones = null;
+      try { opiniones = await rpc("curso_resenas", { p_curso: c.id }); } catch (e) { /* sin reseñas todavía */ }
+
+      const v = $("vDetalle");
+      v.replaceChildren();
+      v.appendChild(el("span", "eyebrow", "Taller online"));
+      v.appendChild(el("h1", "", c.nombre));
+      if (c.descripcion) v.appendChild(el("p", "bajada", c.descripcion));
+      const det = el("div", "detalle");
+
+      const izq = el("div");
+      izq.appendChild(tarjetaPortada(c.portada_url));
+      izq.appendChild(el("h2", "sub", "Lo que vas a ver"));
+      if (temario.length) {
+        const ol = el("ol", "temario");
+        temario.forEach(function (l) {
+          const li = el("li", "", l.titulo);
+          if (Number(l.minutos) > 0) li.appendChild(el("small", "", l.minutos + " min"));
+          ol.appendChild(li);
+        });
+        izq.appendChild(ol);
+      } else izq.appendChild(el("p", "ayuda", "El contenido se está terminando de cargar."));
+      if (opiniones && Number(opiniones.cantidad) > 0) izq.appendChild(bloqueResenas(opiniones));
+
+      const der = el("aside", "caja");
+      der.appendChild(el("span", "etiqueta", "Precio total"));
+      der.appendChild(el("div", "precio", plata(c.precio)));
+      const inc = el("ul", "incluye");
+      ["Clases en video para ver a tu ritmo", "Material para descargar", "Acceso por " + duracion(c.acceso_dias) + " desde el pago", "Certificado al completar el taller"].forEach(function (t) { inc.appendChild(el("li", "", t)); });
+      der.appendChild(inc);
+      if (mio) {
+        der.appendChild(el("p", "aviso bien", "Ya tenés este taller. Tu acceso llega hasta el " + fechaLarga(mio.vence) + "."));
+        const b = boton("Entrar al taller", function () { abrirAula(c.id); });
+        b.classList.add("btn-bloque"); der.appendChild(b);
+      } else {
+        const b = boton("Comprar el taller", function () { comprar(c, b); });
+        b.classList.add("btn-bloque"); der.appendChild(b);
+        der.appendChild(el("p", "ayuda", S.token ? "Pagás de forma segura con Mercado Pago. Apenas se aprueba el pago, se habilita tu acceso." : "Primero creás tu cuenta (es gratis) y después pagás con Mercado Pago. El acceso se habilita apenas se aprueba el pago."));
+        der.appendChild(el("p", "ayuda", POLITICA_DEVOLUCION));
+      }
+      det.appendChild(izq); det.appendChild(der);
+      v.appendChild(det);
+      history.replaceState(null, "", "aula.html?curso=" + encodeURIComponent(c.slug));
+      vista("vDetalle");
+    }
+
+    async function comprar(c, btn) {
+      if (!S.token) { S.volverA = c.slug; return mostrarAuth("registro", { texto: "Creá tu cuenta para comprar “" + c.nombre + "”. Si ya tenés una, tocá “Ingresar”." }); }
+      btn.disabled = true;
+      const textoOriginal = btn.textContent;
+      btn.textContent = "Te llevamos a Mercado Pago...";
+      try {
+        const r = await api("/functions/v1/curso-pagar", { method: "POST", body: JSON.stringify({ curso_id: c.id }) });
+        const d = await r.json().catch(function () { return {}; });
+        if (r.ok && d.url && /^https:\/\//.test(d.url)) { location.href = d.url; return; }
+        if (d.error === "ya_tenes_acceso") { avisar("Ya tenés este taller."); return abrirAula(c.id); }
+        if (d.error === "sin_ficha") { S.volverA = c.slug; return vista("vFicha"); }
+        if (r.status === 401) { S.volverA = c.slug; return mostrarAuth("ingresar", { texto: "Tu sesión venció. Ingresá de nuevo para continuar." }); }
+        avisar("No pudimos iniciar el pago. Probá de nuevo en un momento.");
+      } catch (e) {
+        avisar("No pudimos conectarnos. Revisá tu internet y probá de nuevo.");
+      }
+      btn.disabled = false; btn.textContent = textoOriginal;
+    }
+
+    // Vuelta desde Mercado Pago
+    async function volverDePago(q) {
+      const token = q.get("compra"), estado = q.get("pago"), pagoId = q.get("payment_id") || q.get("collection_id") || "";
+      const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      history.replaceState(null, "", "aula.html");
+      if (!S.token) return mostrarAuth("ingresar", { texto: "Ingresá con tu cuenta para ver el estado de tu compra." });
+      if (estado === "fallo") {
+        return mensaje("El pago no se completó", "No se te cobró nada. Podés volver a intentarlo cuando quieras.", [boton("Ver talleres", irMis)]);
+      }
+      cargando("Estamos confirmando tu pago...");
+      if (uuid.test(token || "") && /^\d{5,20}$/.test(pagoId)) {
+        try {
+          await api("/functions/v1/curso-pagar", { method: "POST", body: JSON.stringify({ accion: "verificar", token: token, payment_id: pagoId }) });
+        } catch (e) { /* el aviso automático de Mercado Pago lo confirma igual */ }
+      }
+      for (let i = 0; i < 8; i++) {
+        const mis = await misCursos();
+        if (mis.some(function (m) { return m.vigente; })) {
+          avisar("¡Pago confirmado! Ya podés empezar.");
+          return irMis();
+        }
+        await new Promise(function (ok) { setTimeout(ok, 2500); });
+      }
+      mensaje(
+        estado === "pendiente" ? "Estamos esperando tu pago" : "Todavía no vemos tu pago",
+        "Apenas Mercado Pago lo apruebe, tu taller se habilita solo y aparece en “Mis talleres”. Si pagaste en efectivo puede tardar hasta un día hábil. Si pasa más tiempo, escribinos.",
+        [boton("Ver mis talleres", irMis)]
+      );
+    }
+
+    // ---------- Aula de un taller ----------
+    const A = { curso: null, lecciones: [], hechas: new Set(), materiales: [], actual: 0, vence: null, certificado: null };
+
+    // Solo se incrustan videos de estos servicios; cualquier otro link se ofrece como botón
+    // Video subido desde el panel: se pide un link firmado que dura 2 horas (solo lo consigue quien tiene acceso al taller)
+    function videoSubido(marco, l) {
+      const ph = el("p", "ayuda", "Cargando el video...");
+      marco.appendChild(ph);
+      (async function () {
+        try {
+          const ruta = String(l.video_path).split("/").map(encodeURIComponent).join("/");
+          const r = await api("/storage/v1/object/sign/cursos-videos/" + ruta, { method: "POST", body: JSON.stringify({ expiresIn: 7200 }) });
+          const d = r.ok ? await r.json() : null;
+          if (!d || !d.signedURL) throw new Error("firma");
+          const v = document.createElement("video");
+          v.controls = true; v.playsInline = true; v.preload = "metadata"; v.disablePictureInPicture = true;
+          v.setAttribute("playsinline", ""); v.setAttribute("controlsList", "nodownload");
+          v.oncontextmenu = function (e) { e.preventDefault(); };
+          v.src = SUPABASE_URL + "/storage/v1" + d.signedURL;
+          if (marco.isConnected) ph.replaceWith(v);
+        } catch (e) {
+          if (marco.isConnected) ph.replaceWith(el("p", "ayuda", "No pudimos cargar el video. Revisá tu conexión y volvé a abrir la clase."));
+        }
+      })();
+    }
+    function embedDe(url) {
+      let u;
+      try { u = new URL(url); } catch (e) { return ""; }
+      if (u.protocol !== "https:") return "";
+      const h = u.hostname.replace(/^www\./, "");
+      let m;
+      if (h === "youtu.be") { m = u.pathname.match(/^\/([\w-]{6,20})/); return m ? "https://www.youtube-nocookie.com/embed/" + m[1] : ""; }
+      if (h === "youtube.com" || h === "youtube-nocookie.com") {
+        if ((m = u.pathname.match(/^\/embed\/([\w-]{6,20})/))) return "https://www.youtube-nocookie.com/embed/" + m[1];
+        const id = u.searchParams.get("v");
+        return id && /^[\w-]{6,20}$/.test(id) ? "https://www.youtube-nocookie.com/embed/" + id : "";
+      }
+      if (h === "vimeo.com") {
+        m = u.pathname.match(/^\/(\d+)(?:\/([0-9a-f]+))?/i);
+        return m ? "https://player.vimeo.com/video/" + m[1] + (m[2] ? "?h=" + m[2] : "") : "";
+      }
+      if (h === "player.vimeo.com") { m = u.pathname.match(/^\/video\/(\d+)/); return m ? "https://player.vimeo.com/video/" + m[1] + (u.search || "") : ""; }
+      if (h === "drive.google.com") {
+        m = u.pathname.match(/^\/file\/d\/([\w-]{10,80})/);
+        const idd = m ? m[1] : u.searchParams.get("id");
+        return idd && /^[\w-]{10,80}$/.test(idd) ? "https://drive.google.com/file/d/" + idd + "/preview" : "";
+      }
+      if (h === "iframe.mediadelivery.net") {
+        m = u.pathname.match(/^\/(?:embed|play)\/(\d+)\/([0-9a-f-]{36})/i);
+        return m ? "https://iframe.mediadelivery.net/embed/" + m[1] + "/" + m[2] : "";
+      }
+      return "";
+    }
+
+    async function abrirAula(cursoId) {
+      cargando("Abriendo tu taller...");
+      const mis = await misCursos();
+      const mio = mis.find(function (m) { return m.curso_id === cursoId; });
+      if (!mio || !mio.vigente) {
+        const slug = mio ? mio.slug : null;
+        return mensaje("Tu acceso a este taller no está activo", mio ? "Venció el " + fechaLarga(mio.vence) + ". Podés volver a inscribirte cuando quieras." : "Para entrar tenés que comprar el taller primero.",
+          [slug ? boton("Volver a inscribirme", function () { mostrarDetalle(slug); }) : boton("Ver talleres", irMis)]);
+      }
+      try {
+        const res = await Promise.all([
+          leer("/rest/v1/cursos?select=id,slug,nombre,descripcion&id=eq." + cursoId + "&limit=1"),
+          leer("/rest/v1/lecciones?select=id,orden,titulo,descripcion,video_url,video_path,minutos&curso_id=eq." + cursoId + "&activo=eq.true&order=orden.asc,id.asc")
+            .catch(function () { return leer("/rest/v1/lecciones?select=id,orden,titulo,descripcion,video_url,minutos&curso_id=eq." + cursoId + "&activo=eq.true&order=orden.asc,id.asc"); }),
+          leer("/rest/v1/progreso?select=leccion_id&curso_id=eq." + cursoId),
+          leer("/rest/v1/materiales?select=id,leccion_id,titulo,ruta&curso_id=eq." + cursoId + "&order=orden.asc,id.asc")
+        ]);
+        A.curso = res[0][0]; A.lecciones = res[1]; A.hechas = new Set(res[2].map(function (p) { return p.leccion_id; }));
+        A.materiales = res[3]; A.vence = mio.vence; A.certificado = mio.certificado || null;
+        A.mia = null;
+        try { const rr = await rpc("curso_resenas", { p_curso: cursoId }); A.mia = rr && rr.mia ? rr.mia : null; } catch (e) { /* sin reseñas todavía */ }
+      } catch (e) {
+        return mensaje("No pudimos abrir el taller", "Revisá tu conexión y probá de nuevo.", [boton("Reintentar", function () { abrirAula(cursoId); })]);
+      }
+      if (!A.curso) return mensaje("Taller no encontrado", "", [boton("Mis talleres", irMis)]);
+      const primera = A.lecciones.findIndex(function (l) { return !A.hechas.has(l.id); });
+      A.actual = primera === -1 ? 0 : primera;
+      history.replaceState(null, "", "aula.html");
+      pintarAula();
+      vista("vAula");
+    }
+
+    function pintarAula() {
+      const v = $("vAula");
+      v.replaceChildren();
+      const total = A.lecciones.length, hechas = A.lecciones.filter(function (l) { return A.hechas.has(l.id); }).length;
+      const pct = total ? Math.round(hechas * 100 / total) : 0;
+
+      const volver = el("button", "link", "← Mis talleres");
+      volver.type = "button"; volver.onclick = irMis;
+      v.appendChild(volver);
+      v.appendChild(el("h1", "", A.curso.nombre));
+      const cab = el("div", "progreso-cab");
+      const fila = el("div", "fila");
+      fila.appendChild(el("span", "", hechas + " de " + total + " lecciones · " + pct + "%"));
+      fila.appendChild(el("span", "", "Acceso hasta el " + fechaLarga(A.vence)));
+      const barra = el("div", "barra"); const i = el("i"); i.style.width = pct + "%"; barra.appendChild(i);
+      cab.appendChild(fila); cab.appendChild(barra);
+      v.appendChild(cab);
+
+      if (!total) {
+        v.appendChild(el("p", "aviso", "Las clases de este taller se están cargando. Volvé en unos días."));
+        return;
+      }
+      if (hechas === total) {
+        const caja = el("div", "aviso bien");
+        caja.appendChild(el("p", "", "¡Completaste el taller! Ya podés obtener tu certificado. Y si querés, contanos qué te pareció en “Tu opinión”, más abajo."));
+        caja.appendChild(boton(A.certificado ? "Ver mi certificado" : "Obtener mi certificado", function () { A.certificado ? verCertificado(A.certificado) : emitirCertificado(A.curso.id); }));
+        caja.lastChild.style.marginTop = "12px";
+        v.appendChild(caja);
+      }
+
+      const l = A.lecciones[A.actual];
+      const grid = el("div", "aula");
+      const principal = el("div");
+
+      const marco = el("div", "video");
+      const emb = l.video_url ? embedDe(l.video_url) : "";
+      if (l.video_path) {
+        videoSubido(marco, l);
+      } else if (emb) {
+        const f = document.createElement("iframe");
+        f.src = emb; f.title = l.titulo; f.loading = "lazy";
+        f.allow = "autoplay; fullscreen; picture-in-picture; encrypted-media";
+        f.referrerPolicy = "strict-origin-when-cross-origin";
+        // Aislado: el reproductor no puede mandar a la alumna a otra página ni enviar formularios
+        f.setAttribute("sandbox", "allow-scripts allow-same-origin allow-presentation allow-popups allow-popups-to-escape-sandbox");
+        f.allowFullscreen = true;
+        marco.appendChild(f);
+      } else if (/^https:\/\//.test(l.video_url || "")) {
+        const a = el("a", "btn", "Abrir el video");
+        a.href = l.video_url; a.target = "_blank"; a.rel = "noopener noreferrer";
+        marco.appendChild(a);
+      } else marco.appendChild(el("p", "ayuda", "Esta lección todavía no tiene video."));
+      // Marca de agua con el email de la alumna: desalienta compartir capturas o grabaciones de pantalla
+      const marca = el("div", "marca-agua", emailSesion() || "");
+      marca.setAttribute("aria-hidden", "true");
+      marco.appendChild(marca);
+      principal.appendChild(marco);
+
+      const lc = el("div", "leccion-cab");
+      lc.appendChild(el("h2", "", (A.actual + 1) + ". " + l.titulo));
+      const ya = A.hechas.has(l.id);
+      const bm = boton(ya ? "✓ Vista (desmarcar)" : "Marcar como vista", function () { marcar(l, !ya, bm); }, ya);
+      lc.appendChild(bm);
+      principal.appendChild(lc);
+      if (l.descripcion) principal.appendChild(el("p", "texto-leccion", l.descripcion));
+
+      const mats = A.materiales.filter(function (m) { return m.leccion_id === l.id || m.leccion_id == null; });
+      if (mats.length) {
+        principal.appendChild(el("h2", "sub", "Material para descargar"));
+        const ul = el("ul", "materiales");
+        mats.forEach(function (m) {
+          const li = el("li");
+          const b = boton("⬇ " + m.titulo, function () { bajarMaterial(m, b); }, true);
+          b.style.justifyContent = "flex-start"; b.style.textAlign = "left";
+          li.appendChild(b); ul.appendChild(li);
+        });
+        principal.appendChild(ul);
+      }
+      const nav = el("div", "acciones");
+      nav.style.justifyContent = "flex-start";
+      if (A.actual > 0) nav.appendChild(boton("← Anterior", function () { A.actual--; pintarAula(); window.scrollTo(0, 0); }, true));
+      if (A.actual < total - 1) nav.appendChild(boton("Siguiente →", function () { A.actual++; pintarAula(); window.scrollTo(0, 0); }));
+      principal.appendChild(nav);
+
+      const lateral = el("aside");
+      lateral.appendChild(el("span", "etiqueta", "Lecciones del taller"));
+      const ul = el("ol", "lista-lecc");
+      ul.style.marginTop = "10px";
+      A.lecciones.forEach(function (x, n) {
+        const li = el("li");
+        const b = el("button");
+        b.type = "button";
+        if (n === A.actual) b.setAttribute("aria-current", "true");
+        const t = el("span", "tilde" + (A.hechas.has(x.id) ? " hecha" : ""), A.hechas.has(x.id) ? "✓" : "");
+        b.appendChild(t);
+        b.appendChild(el("span", "", (n + 1) + ". " + x.titulo));
+        if (Number(x.minutos) > 0) b.appendChild(el("small", "", x.minutos + " min"));
+        b.onclick = function () { A.actual = n; pintarAula(); window.scrollTo(0, 0); };
+        li.appendChild(b); ul.appendChild(li);
+      });
+      lateral.appendChild(ul);
+
+      grid.appendChild(principal); grid.appendChild(lateral);
+      v.appendChild(grid);
+      v.appendChild(tarjetaResena());
+    }
+
+    // ---------- Panel de la dueña (solo lo ve quien figura como dueña en la base) ----------
+    const PN = { filas: [], resenas: [], sub: "alumnas", buscar: "", abierta: null };
+    async function detectarDuena() {
+      if (!S.token) { S.duena = false; return false; }
+      if (S.duenaDe === S.token) return !!S.duena;
+      S.duenaDe = S.token; S.duena = false;
+      try {
+        const r = await rpc("cursos_resumen", {});
+        if (r && r.ok) { S.duena = true; PN.filas = r.filas || []; }
+      } catch (e) { /* no es dueña: la alumna común no ve nada de esto */ }
+      pintarNav();
+      return !!S.duena;
+    }
+    function pnDias(iso) { return iso ? Math.floor((Date.now() - new Date(iso).getTime()) / 864e5) : null; }
+    function pnCorta(iso) { const d = new Date(iso); return isNaN(d) ? "" : d.toLocaleDateString("es-AR", { day: "numeric", month: "short" }); }
+    function pnEstado(f) {
+      const vencida = f.vence && new Date(f.vence) < new Date();
+      if (f.estado === "activa") return vencida ? { k: "cerrada", t: "Vencida", c: "mal" } : { k: "activa", t: "Activa", c: "ok" };
+      if (f.estado === "pendiente") return { k: "pendiente", t: "Sin pagar", c: "aviso" };
+      if (f.estado === "reembolsada") return { k: "cerrada", t: "Reembolsada", c: "mal" };
+      return { k: "cerrada", t: "Vencida", c: "mal" };
+    }
+    function pnAlumnas() {
+      const m = new Map();
+      PN.filas.forEach(function (f) {
+        const k = String(f.email || f.alumna || "?").toLowerCase();
+        if (!m.has(k)) m.set(k, { k: k, nombre: f.alumna || "(sin nombre)", email: f.email, telefono: f.telefono, ultimo_ingreso: f.ultimo_ingreso, insc: [] });
+        m.get(k).insc.push(f);
+      });
+      return Array.from(m.values()).sort(function (a, b) { return a.nombre.localeCompare(b.nombre, "es"); });
+    }
+    async function irPanel() {
+      if (!S.token || !(await detectarDuena())) { avisar("Este panel es solo para la dueña."); return irMis(); }
+      cargando("Cargando el panel...");
+      PN.abierta = null;
+      try {
+        const res = await Promise.all([
+          rpc("cursos_resumen", {}),
+          leer("/rest/v1/resenas_cursos?select=id,estrellas,texto,visible,creado,cursos(nombre),alumnas(nombre)&order=creado.desc&limit=100").catch(function () { return []; })
+        ]);
+        PN.filas = res[0] && res[0].ok ? (res[0].filas || []) : [];
+        PN.resenas = res[1] || [];
+      } catch (e) { return mensaje("No pudimos cargar el panel", "Revisá tu conexión y probá de nuevo.", [boton("Reintentar", irPanel)]); }
+      pintarPanel();
+    }
+    function pintarPanel() {
+      const v = $("vDuena");
+      v.replaceChildren();
+      v.appendChild(el("span", "eyebrow", "Solo para vos"));
+      const h1 = el("h1", ""); h1.appendChild(document.createTextNode("Panel de ")); h1.appendChild(el("em", "", "Nena")); v.appendChild(h1);
+      if (PN.abierta) { pnFicha(v); return vista("vDuena"); }
+      const nav = el("div", "pn-sub");
+      [["alumnas", "Alumnas"], ["stats", "Estadísticas"], ["opiniones", "Opiniones"], ["talleres", "Talleres"]].forEach(function (x) {
+        const b = el("button", "btn btn-borde btn-chico", x[1]);
+        b.type = "button"; b.setAttribute("aria-pressed", PN.sub === x[0] ? "true" : "false");
+        b.onclick = function () { PN.sub = x[0]; pintarPanel(); };
+        nav.appendChild(b);
+      });
+      v.appendChild(nav);
+      if (PN.sub === "alumnas") pnLista(v);
+      else if (PN.sub === "stats") pnStats(v);
+      else if (PN.sub === "opiniones") pnOpiniones(v);
+      else pnTalleres(v);
+      vista("vDuena");
+    }
+    function pnLista(v) {
+      const caja = el("div", "caja");
+      const todas = pnAlumnas();
+      const buscar = el("input", "input pn-buscar");
+      buscar.type = "search"; buscar.placeholder = "Buscar alumna por nombre"; buscar.value = PN.buscar;
+      buscar.setAttribute("aria-label", "Buscar alumna");
+      caja.appendChild(buscar);
+      caja.appendChild(el("p", "ayuda", todas.length + (todas.length === 1 ? " alumna" : " alumnas") + ". Tocá un nombre para ver todo lo suyo."));
+      const lista = el("div", "pn-lista");
+      function pintarLista() {
+        lista.replaceChildren();
+        const q = PN.buscar.trim().toLowerCase();
+        const vis = todas.filter(function (a) { return !q || a.nombre.toLowerCase().indexOf(q) !== -1; });
+        if (!vis.length) lista.appendChild(el("p", "ayuda", todas.length ? "Nadie coincide con esa búsqueda." : "Todavía no hay alumnas. Van a aparecer cuando se anoten."));
+        vis.forEach(function (a) {
+          const b = el("button", "pn-fila", a.nombre);
+          b.type = "button";
+          b.appendChild(el("span", "", "›"));
+          b.onclick = function () { PN.abierta = a.k; pintarPanel(); };
+          lista.appendChild(b);
+        });
+      }
+      buscar.oninput = function () { PN.buscar = buscar.value; pintarLista(); };
+      pintarLista();
+      caja.appendChild(lista);
+      v.appendChild(caja);
+    }
+    function pnMensajeWa(f) {
+      const primero = String(f.alumna || "").trim().split(/\s+/)[0] || "";
+      const negocio = (NEGOCIO && NEGOCIO.nombre) || "Innova Nails";
+      const est = pnEstado(f);
+      if (est.k === "activa" && Number(f.hechas) === 0) return "Hola " + primero + "! Soy de " + negocio + ". Vi que todavía no empezaste el taller “" + f.curso + "”. Cualquier duda con el ingreso, escribime y te ayudo.";
+      if (est.k === "activa" && Number(f.hechas) < Number(f.total)) return "Hola " + primero + "! Soy de " + negocio + ". Hace unos días que no avanzás en el taller “" + f.curso + "”. Seguí cuando quieras, cualquier duda escribime.";
+      return "Hola " + primero + "! Te escribo de " + negocio + " por el taller “" + f.curso + "”.";
+    }
+    function pnFicha(v) {
+      const a = pnAlumnas().find(function (x) { return x.k === PN.abierta; });
+      const volver = el("button", "pn-volver", "‹ Todas las alumnas");
+      volver.type = "button"; volver.onclick = function () { PN.abierta = null; pintarPanel(); };
+      v.appendChild(volver);
+      if (!a) { v.appendChild(el("p", "ayuda", "No encontramos a esa alumna.")); return; }
+      const caja = el("div", "caja");
+      caja.appendChild(el("h2", "", a.nombre));
+      [a.email, a.telefono].filter(Boolean).forEach(function (x) { caja.appendChild(el("p", "ayuda", x)); });
+      if (a.ultimo_ingreso) caja.appendChild(el("p", "ayuda", "Última vez que entró: " + fechaLarga(a.ultimo_ingreso) + " (hace " + pnDias(a.ultimo_ingreso) + " d)"));
+      const vistas = a.insc.reduce(function (n, f) { return n + Number(f.hechas || 0); }, 0);
+      const pagadas = a.insc.filter(function (f) { return f.estado === "activa" || f.estado === "vencida"; });
+      const stats = el("div", "pn-stats"); stats.style.marginTop = "18px";
+      [["Talleres", String(a.insc.length)], ["Lecciones vistas", String(vistas)], ["Pagó", plata(pagadas.reduce(function (n, f) { return n + Number(f.monto || 0); }, 0))]].forEach(function (x) {
+        const c = el("div", "pn-stat"); c.appendChild(el("small", "", x[0])); c.appendChild(el("strong", "", x[1])); stats.appendChild(c);
+      });
+      caja.appendChild(stats);
+      a.insc.forEach(function (f) {
+        const est = pnEstado(f), total = Number(f.total) || 0, hechas = Number(f.hechas) || 0;
+        const pct = total ? Math.round(hechas * 100 / total) : 0;
+        const t = el("div", "pn-taller");
+        const cab = el("div", "pn-cab"); cab.appendChild(el("h3", "", f.curso)); cab.appendChild(el("span", "pn-tag " + est.c, est.t)); t.appendChild(cab);
+        if (est.k !== "pendiente") {
+          const fila = el("div", "progreso-cab"); fila.style.margin = "10px 0 0";
+          const tx = el("div", "fila"); tx.appendChild(el("span", "", hechas + " de " + total + " lecciones")); tx.appendChild(el("span", "", pct + "%")); fila.appendChild(tx);
+          const bar = el("div", "barra"); const i = document.createElement("i"); i.style.width = pct + "%"; bar.appendChild(i); fila.appendChild(bar);
+          t.appendChild(fila);
+          t.appendChild(el("p", "", f.ultimo_avance ? "Último avance hace " + pnDias(f.ultimo_avance) + " d (" + pnCorta(f.ultimo_avance) + ")" : (est.k === "activa" ? "Todavía no empezó." : "Sin avances.")));
+          if (f.inicio) t.appendChild(el("p", "", "Compró el " + fechaLarga(f.inicio) + (f.vence ? " · " + (est.k === "activa" ? "acceso hasta el " : "venció el ") + fechaLarga(f.vence) : "")));
+          t.appendChild(el("p", "", "Pagó " + plata(f.monto) + (f.pago_id ? " · pago " + f.pago_id : "")));
+        } else t.appendChild(el("p", "", "Empezó la compra pero no pagó."));
+        if (f.pago_nota && f.estado !== "reembolsada") t.appendChild(el("p", "pn-nota-mal", "Revisar: " + f.pago_nota));
+        if (f.estado === "reembolsada" && f.pago_nota) t.appendChild(el("p", "", f.pago_nota));
+        const acc = el("div", "pn-acc");
+        const wa = String(f.telefono || "").replace(/\D/g, "");
+        if (wa.length >= 10 && f.estado !== "pendiente") {
+          const num = wa.indexOf("549") === 0 ? wa : (wa.indexOf("54") === 0 ? "549" + wa.slice(2) : (wa.length === 10 ? "549" + wa : wa));
+          const l = el("a", "btn btn-borde btn-chico", "Escribir por WhatsApp");
+          l.href = "https://wa.me/" + num + "?text=" + encodeURIComponent(pnMensajeWa(f)); l.target = "_blank"; l.rel = "noopener noreferrer";
+          acc.appendChild(l);
+        }
+        if (f.estado === "activa") {
+          const b = boton("Reembolsar", async function () {
+            if (!confirm("¿Reembolsar el taller de " + a.nombre + "?\n\nVa a perder el acceso ahora mismo. Después tenés que devolverle el dinero desde tu cuenta de Mercado Pago" + (f.pago_id ? " (pago " + f.pago_id + ")" : "") + ".")) return;
+            b.disabled = true;
+            try {
+              const r = await rpc("curso_reembolsar", { p_inscripcion: f.id });
+              if (!r || !r.ok) throw new Error("reembolso");
+              avisar("Acceso cortado. Ahora devolvé el dinero desde Mercado Pago.");
+              const k = PN.abierta; await irPanel(); PN.abierta = k; pintarPanel();
+            } catch (e) { avisar("No pudimos registrar el reembolso."); b.disabled = false; }
+          }, true);
+          acc.appendChild(b);
+        }
+        if (acc.childNodes.length) t.appendChild(acc);
+        caja.appendChild(t);
+      });
+      v.appendChild(caja);
+    }
+    function pnStats(v) {
+      const F = PN.filas;
+      const activas = F.filter(function (f) { return pnEstado(f).k === "activa"; });
+      const cobradas = F.filter(function (f) { return f.estado === "activa" || f.estado === "vencida"; });
+      const cobrado = cobradas.reduce(function (n, f) { return n + Number(f.monto || 0); }, 0);
+      const pct = function (f) { return Number(f.total) ? Number(f.hechas) / Number(f.total) : 0; };
+      const medio = activas.length ? Math.round(activas.reduce(function (n, f) { return n + pct(f); }, 0) * 100 / activas.length) : 0;
+      const completaron = cobradas.filter(function (f) { return Number(f.total) > 0 && Number(f.hechas) >= Number(f.total); }).length;
+      const sinEmpezar = activas.filter(function (f) { return Number(f.hechas) === 0; }).length;
+      const frenadas = activas.filter(function (f) { return Number(f.hechas) > 0 && Number(f.hechas) < Number(f.total) && pnDias(f.ultimo_avance) >= 7; }).length;
+      const caja = el("div", "caja");
+      const stats = el("div", "pn-stats");
+      [["Alumnas", String(pnAlumnas().length)], ["Con acceso activo", String(activas.length)], ["Cobrado", plata(cobrado)], ["Avance medio", medio + "%"],
+       ["Terminaron", String(completaron)], ["Sin empezar", String(sinEmpezar)], ["Frenadas (7+ d)", String(frenadas)], ["Para revisar", String(F.filter(function (f) { return f.pago_nota && f.estado !== "reembolsada"; }).length)]].forEach(function (x) {
+        const c = el("div", "pn-stat"); c.appendChild(el("small", "", x[0])); c.appendChild(el("strong", "", x[1])); stats.appendChild(c);
+      });
+      caja.appendChild(stats);
+      caja.appendChild(el("h2", "", "Por taller"));
+      const porCurso = {};
+      F.forEach(function (f) { (porCurso[f.curso] = porCurso[f.curso] || []).push(f); });
+      const tabla = el("table", "pn-tabla");
+      const th = el("tr"); ["Taller", "Alumnas", "Avance", "Cobrado"].forEach(function (x) { th.appendChild(el("th", "", x)); });
+      tabla.appendChild(th);
+      Object.keys(porCurso).forEach(function (c) {
+        const l = porCurso[c], ac = l.filter(function (f) { return pnEstado(f).k === "activa"; });
+        const med = ac.length ? Math.round(ac.reduce(function (n, f) { return n + pct(f); }, 0) * 100 / ac.length) : 0;
+        const tr = el("tr");
+        [c, String(l.filter(function (f) { return f.estado === "activa" || f.estado === "vencida"; }).length), med + "%", plata(l.filter(function (f) { return f.estado === "activa" || f.estado === "vencida"; }).reduce(function (n, f) { return n + Number(f.monto || 0); }, 0))].forEach(function (x) { tr.appendChild(el("td", "", x)); });
+        tabla.appendChild(tr);
+      });
+      caja.appendChild(tabla);
+      v.appendChild(caja);
+    }
+    function pnOpiniones(v) {
+      const caja = el("div", "caja");
+      caja.appendChild(el("p", "ayuda", "Las opiniones nuevas no se publican solas: aprobalas para que se vean. Si alguna no corresponde, dejala sin publicar (la alumna sigue viéndola) o borrala."));
+      if (!PN.resenas.length) caja.appendChild(el("p", "ayuda", "Todavía no hay opiniones."));
+      PN.resenas.slice().sort(function (x, y) { return (x.visible === y.visible) ? 0 : (x.visible ? 1 : -1); }).forEach(function (r) {
+        const it = el("article", "resena");
+        const q = el("div", "quien-r");
+        q.appendChild(estrellasEl(r.estrellas));
+        q.appendChild(el("strong", "", (r.alumnas && r.alumnas.nombre) || "(alumna)"));
+        q.appendChild(el("span", "pn-tag " + (r.visible ? "ok" : "aviso"), r.visible ? "Publicada" : "Sin publicar"));
+        it.appendChild(q);
+        it.appendChild(el("p", "ayuda", (r.cursos && r.cursos.nombre ? r.cursos.nombre + " · " : "") + fechaLarga(r.creado)));
+        it.appendChild(el("p", "", r.texto));
+        const acc = el("div", "pn-acc");
+        acc.appendChild(boton(r.visible ? "Dejar sin publicar" : "Aprobar y publicar", async function () {
+          try {
+            const x = await api("/rest/v1/resenas_cursos?id=eq." + r.id, { method: "PATCH", body: JSON.stringify({ visible: !r.visible }) });
+            if (!x.ok) throw new Error("patch");
+            r.visible = !r.visible; pintarPanel();
+          } catch (e) { avisar("No pudimos cambiarla."); }
+        }, true));
+        acc.appendChild(boton("Borrar", async function () {
+          if (!confirm("¿Borrar esta opinión? No se puede deshacer. Si solo querés que no se vea, usá “Ocultar”.")) return;
+          try {
+            const x = await api("/rest/v1/resenas_cursos?id=eq." + r.id, { method: "DELETE" });
+            if (!x.ok) throw new Error("delete");
+            PN.resenas = PN.resenas.filter(function (z) { return z.id !== r.id; }); pintarPanel();
+          } catch (e) { avisar("No pudimos borrarla."); }
+        }, true));
+        it.appendChild(acc);
+        caja.appendChild(it);
+      });
+      v.appendChild(caja);
+    }
+    function pnTalleres(v) {
+      const caja = el("div", "caja");
+      const nombres = {};
+      PN.filas.forEach(function (f) { nombres[f.curso] = true; });
+      const l = Object.keys(nombres);
+      if (!l.length) caja.appendChild(el("p", "ayuda", "Todavía no hay compras en ningún taller."));
+      l.forEach(function (c) {
+        const fs = PN.filas.filter(function (f) { return f.curso === c; });
+        const ac = fs.filter(function (f) { return pnEstado(f).k === "activa"; }).length;
+        const t = el("div", "pn-taller"); t.appendChild(el("h3", "", c));
+        t.appendChild(el("p", "", ac + (ac === 1 ? " alumna activa" : " alumnas activas") + " · " + fs.length + " inscripciones"));
+        caja.appendChild(t);
+      });
+      const edit = el("a", "btn btn-borde", "Editar talleres, clases y material");
+      edit.href = "admin.html"; caja.appendChild(edit);
+      caja.appendChild(el("p", "ayuda", "La carga de videos y PDF se hace en el panel completo del negocio."));
+      v.appendChild(caja);
+    }
+
+    // ---------- Reseñas ----------
+    function textoEstrellas(n) {
+      n = Math.max(0, Math.min(5, Math.round(Number(n) || 0)));
+      return "★★★★★".slice(0, n) + "☆☆☆☆☆".slice(0, 5 - n);
+    }
+    function estrellasEl(n) {
+      const s = el("span", "estrellas", textoEstrellas(n));
+      s.setAttribute("role", "img");
+      s.setAttribute("aria-label", n + " de 5 estrellas");
+      return s;
+    }
+    function bloqueResenas(res) {
+      const b = el("div");
+      b.appendChild(el("h2", "sub", "Opiniones de alumnas"));
+      const val = el("div", "valoracion");
+      val.appendChild(el("strong", "", String(res.promedio).replace(".", ",")));
+      val.appendChild(estrellasEl(res.promedio));
+      val.appendChild(el("span", "etiqueta", res.cantidad + (Number(res.cantidad) === 1 ? " opinión" : " opiniones")));
+      b.appendChild(val);
+      (res.items || []).forEach(function (r) {
+        const it = el("article", "resena");
+        const q = el("div", "quien-r");
+        q.appendChild(estrellasEl(r.estrellas));
+        q.appendChild(el("strong", "", r.autor));
+        q.appendChild(el("span", "", fechaLarga(r.creado)));
+        it.appendChild(q);
+        it.appendChild(el("p", "", r.texto));
+        if (/^(https:\/\/|assets\/)/.test(r.foto || "")) {
+          const fo = document.createElement("img");
+          fo.src = r.foto; fo.alt = "Foto del trabajo de " + r.autor; fo.loading = "lazy"; fo.className = "foto-resena";
+          fo.onerror = function () { fo.remove(); };
+          it.appendChild(fo);
+        }
+        if (r.respuesta) {
+          const rp = el("div", "resp-dueña");
+          rp.appendChild(el("strong", "", "Respuesta de Nena"));
+          rp.appendChild(el("p", "", r.respuesta));
+          it.appendChild(rp);
+        }
+        b.appendChild(it);
+      });
+      return b;
+    }
+    const ERRORES_RESENA = {
+      estrellas: "Elegí de 1 a 5 estrellas.",
+      texto: "Escribí tu opinión (entre 5 y 400 letras).",
+      sin_avance: "Mirá al menos una clase antes de dejar tu opinión.",
+      sin_compra: "Solo pueden opinar quienes tienen el taller.",
+      sin_sesion: "Tu sesión venció. Ingresá de nuevo."
+    };
+    // Tarjeta "Tu opinión" al pie del aula: ver, escribir, cambiar o borrar la propia reseña
+    function tarjetaResena() {
+      const caja = el("section", "caja caja-resena");
+      caja.id = "miResena";
+      caja.appendChild(el("h2", "", "Tu opinión"));
+      if (A.hechas.size < 1) {
+        caja.appendChild(el("p", "ayuda", "Cuando mires tu primera clase vas a poder contarnos qué te parece el taller."));
+        return caja;
+      }
+      const mia = A.mia;
+      let nota = mia ? mia.estrellas : 0;
+      caja.appendChild(el("p", "ayuda", mia ? "Ya dejaste tu opinión. Podés cambiarla cuando quieras." : "Tu opinión ayuda a otras alumnas a elegir. Nena la revisa antes de publicarla, con tu nombre y la inicial del apellido."));
+      if (mia && mia.visible === false) caja.appendChild(el("p", "aviso", "Tu opinión está esperando la aprobación de Nena. Cuando la apruebe, se publica."));
+      const estrellas = el("div", "estrellas-input");
+      estrellas.setAttribute("role", "radiogroup");
+      estrellas.setAttribute("aria-label", "Puntaje de 1 a 5 estrellas");
+      const botones = [];
+      function pintar() {
+        botones.forEach(function (b, i) {
+          b.classList.toggle("on", i < nota);
+          b.setAttribute("aria-checked", i + 1 === nota ? "true" : "false");
+        });
+      }
+      for (let i = 1; i <= 5; i++) {
+        const b = el("button", "", "★");
+        b.type = "button";
+        b.setAttribute("role", "radio");
+        b.setAttribute("aria-label", i + (i === 1 ? " estrella" : " estrellas"));
+        b.onclick = function () { nota = i; pintar(); };
+        botones.push(b); estrellas.appendChild(b);
+      }
+      pintar();
+      caja.appendChild(estrellas);
+      const texto = el("textarea", "input");
+      texto.maxLength = 400; texto.rows = 4;
+      texto.placeholder = "Contanos qué te pareció el taller...";
+      texto.setAttribute("aria-label", "Tu opinión sobre el taller");
+      texto.value = mia ? mia.texto : "";
+      caja.appendChild(texto);
+      const acciones = el("div", "acciones");
+      acciones.style.justifyContent = "flex-start";
+      const guardar = boton(mia ? "Actualizar mi opinión" : "Enviar mi opinión", async function () {
+        const t = texto.value.trim();
+        if (nota < 1) return avisar(ERRORES_RESENA.estrellas);
+        if (t.length < 5) return avisar(ERRORES_RESENA.texto);
+        guardar.disabled = true;
+        try {
+          const r = await rpc("curso_resena_guardar", { p_curso: A.curso.id, p_estrellas: nota, p_texto: t });
+          if (!r || !r.ok) { avisar(ERRORES_RESENA[r && r.error] || "No pudimos guardar tu opinión."); guardar.disabled = false; return; }
+          A.mia = { estrellas: nota, texto: t, visible: !!(mia && mia.visible && mia.texto === t) };
+          avisar(mia && mia.visible && mia.texto === t ? "Opinión actualizada." : "¡Gracias! Nena la va a revisar antes de publicarla.");
+          caja.replaceWith(tarjetaResena());
+        } catch (e) { avisar("No pudimos guardar tu opinión. Revisá tu conexión."); guardar.disabled = false; }
+      });
+      acciones.appendChild(guardar);
+      if (mia) {
+        const borrar = boton("Borrar mi opinión", async function () {
+          if (!confirm("¿Borrar tu opinión?")) return;
+          try {
+            await rpc("curso_resena_borrar", { p_curso: A.curso.id });
+            A.mia = null;
+            avisar("Tu opinión se borró.");
+            caja.replaceWith(tarjetaResena());
+          } catch (e) { avisar("No pudimos borrarla. Probá de nuevo."); }
+        }, true);
+        acciones.appendChild(borrar);
+      }
+      caja.appendChild(acciones);
+      return caja;
+    }
+
+    async function marcar(l, hecha, btn) {
+      btn.disabled = true;
+      try {
+        const r = await rpc("curso_marcar_leccion", { p_leccion: l.id, p_hecha: hecha });
+        if (!r || !r.ok) {
+          let m = "No pudimos guardar tu avance.";
+          if (r && r.error === "sin_acceso") m = "Tu acceso a este taller venció.";
+          else if (r && r.error === "muy_rapido") {
+            const e = Number(r.espera) || 20;
+            m = "Mirá la clase con calma: podrás marcarla como vista en " + (e >= 90 ? Math.ceil(e / 60) + " minutos" : e + " segundos") + ".";
+          }
+          avisar(m); btn.disabled = false; return;
+        }
+        if (hecha) A.hechas.add(l.id); else A.hechas.delete(l.id);
+        pintarAula();
+        if (hecha && A.actual < A.lecciones.length - 1 && A.hechas.size < A.lecciones.length) avisar("¡Lección completada!");
+      } catch (e) { avisar("No pudimos guardar tu avance. Revisá tu conexión."); btn.disabled = false; }
+    }
+
+    async function bajarMaterial(m, btn) {
+      btn.disabled = true;
+      try {
+        const ruta = String(m.ruta).split("/").map(encodeURIComponent).join("/");
+        const r = await api("/storage/v1/object/authenticated/cursos-materiales/" + ruta);
+        if (!r.ok) throw new Error("descarga");
+        const blob = await r.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url; a.download = String(m.ruta).split("/").pop() || "material";
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(function () { URL.revokeObjectURL(url); }, 30000);
+      } catch (e) { avisar("No pudimos descargar el archivo. Probá de nuevo."); }
+      btn.disabled = false;
+    }
+
+    // ---------- Certificado ----------
+    async function emitirCertificado(cursoId) {
+      cargando("Preparando tu certificado...");
+      try {
+        const r = await rpc("curso_emitir_certificado", { p_curso: cursoId });
+        if (r && r.ok && r.codigo) { A.certificado = r.codigo; return verCertificado(r.codigo); }
+        avisar(r && r.error === "incompleto" ? "Todavía te faltan lecciones por completar." : "No pudimos emitir el certificado.");
+      } catch (e) { avisar("No pudimos emitir el certificado. Probá de nuevo."); }
+      pintarAula(); vista("vAula");
+    }
+    async function verCertificado(codigo, publico) {
+      cargando("Cargando el certificado...");
+      let d;
+      try { d = await rpc("certificado_verificar", { p_codigo: codigo }); } catch (e) { d = null; }
+      const v = $("vCert");
+      v.replaceChildren();
+      if (!d || !d.valido) {
+        v.appendChild(el("h1", "", "Certificado no encontrado"));
+        v.appendChild(el("p", "bajada", "No existe un certificado con ese código. Revisá que esté bien escrito."));
+        const ac = el("div", "acciones"); ac.style.justifyContent = "flex-start";
+        ac.appendChild(boton("Ir al aula", irMis));
+        v.appendChild(ac);
+        return vista("vCert");
+      }
+      const hoja = el("div", "cert-hoja");
+      hoja.appendChild(el("div", "marca-cert", (NEGOCIO && NEGOCIO.nombre) || "Innova Nails"));
+      hoja.appendChild(el("h1", "", "Certificado de finalización"));
+      hoja.appendChild(el("p", "", "Se certifica que"));
+      hoja.appendChild(el("div", "nombre", d.alumna));
+      hoja.appendChild(el("p", "", "completó el taller online"));
+      hoja.appendChild(el("div", "curso-cert", d.curso));
+      hoja.appendChild(el("p", "", "Emitido el " + fechaLarga(d.emitido)));
+      const pie = el("div", "pie-cert");
+      pie.appendChild(el("div", "", "Código de verificación: " + String(codigo).toUpperCase()));
+      pie.appendChild(el("div", "", "Verificalo en " + SITIO + "aula.html?certificado=" + String(codigo).toUpperCase()));
+      hoja.appendChild(pie);
+      v.appendChild(hoja);
+      const ac = el("div", "acciones");
+      ac.appendChild(boton("Imprimir o guardar como PDF", function () { window.print(); }));
+      if (!publico && S.token) ac.appendChild(boton("Volver a mis talleres", irMis, true));
+      v.appendChild(ac);
+      vista("vCert");
+    }
+
+    // ---------- Links de confirmación / recuperación que vuelven con datos en la dirección (#...) ----------
+    async function manejarHash() {
+      const h = location.hash.replace(/^#/, "");
+      if (!h || h.indexOf("access_token=") === -1) return null;
+      const p = new URLSearchParams(h);
+      if (!p.get("access_token")) return null;
+      guardarSesion({ access_token: p.get("access_token"), refresh_token: p.get("refresh_token") });
+      history.replaceState(null, "", location.pathname + location.search);
+      return p.get("type");
+    }
+
+    async function iniciar() {
+      cargarSesion();
+      cargarNegocio();
+      if (S.token) detectarDuena();
+      if (S.token) rpc("alumna_ingreso", {}).catch(function () { /* no es crítico */ });
+      const tipo = await manejarHash();
+      const q = new URLSearchParams(location.search);
+      if (tipo === "recovery") { pintarNav(); return vista("vClave"); }
+      if (q.get("certificado")) return verCertificado(q.get("certificado"), true);
+      if (tipo === "signup" || tipo === "magiclink" || tipo === "invite") return despuesDeIngresar();
+      if (q.get("compra")) return volverDePago(q);
+      if (q.get("curso")) return mostrarDetalle(q.get("curso"));
+      if (S.token) return irMis();
+      mostrarAuth("ingresar");
+    }
+    iniciar();
+  </script>
+</body>
+</html>

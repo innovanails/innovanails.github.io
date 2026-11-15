@@ -829,6 +829,26 @@
       .hero .veil { background: radial-gradient(ellipse 55% 60% at 50% 45%, rgba(10, 10, 12, .72), rgba(10, 10, 12, 0) 78%), linear-gradient(180deg, rgba(10, 10, 12, .5) 0%, rgba(10, 10, 12, .2) 38%, rgba(10, 10, 12, .85) 85%, #0a0a0c 100%); } }
   </style>
   <noscript><style>.revelar { opacity: 1; transform: none; }</style></noscript>
+  <style>
+    /* ============ TALLERES ONLINE ============ */
+    .tll-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
+    @media (min-width: 760px) { .tll-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (min-width: 1100px) { .tll-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    .tll-card { display: flex; flex-direction: column; background: var(--papel); border: 1px solid var(--linea); }
+    .tll-portada { position: relative; aspect-ratio: 16 / 10; background: var(--arena); overflow: hidden; display: grid; place-items: center; }
+    .tll-portada img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .tll-portada.vacia::before { content: ""; width: 34px; height: 34px; background: var(--oro-fino); clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); }
+    .tll-info { display: flex; flex-direction: column; gap: 12px; padding: 24px 24px 26px; flex: 1; }
+    .tll-info h3 { font: 400 clamp(24px, 2.6vw, 30px)/1.15 var(--display); overflow-wrap: anywhere; }
+    .tll-desc { margin: 0; color: var(--cafe); font-size: 15.5px; line-height: 1.6; }
+    .tll-datos { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; font: 500 11px/1.5 var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--suave); }
+    .tll-meta { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--linea); display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+    .tll-precio { font: 400 clamp(24px, 2.6vw, 30px)/1 var(--display); color: var(--tinta); white-space: nowrap; font-variant-numeric: lining-nums; }
+    .tll-meta .btn { --alto: 46px; padding: 0 24px; font-size: 11px; }
+    .tll-valor { color: var(--bronce); }
+    .tll-pie { margin: 32px 0 0; text-align: center; font-size: 14.5px; color: var(--suave); }
+    .tll-pie a { color: var(--bronce); }
+  </style>
 </head>
 <body>
   <a class="saltar" href="#reservas">Ir a reservar un turno</a>
@@ -842,6 +862,7 @@
         </button>
         <nav class="nav-links" aria-label="Secciones">
           <a href="#servicios">Servicios</a>
+          <a href="#talleres" data-talleres hidden>Talleres</a>
           <a href="#seccionGaleria" data-galeria hidden>Galería</a>
           <a href="#reservas">Reservas</a>
           <a href="#contacto">Contacto</a>
@@ -859,6 +880,7 @@
   <div class="menu-movil" id="menuMovil" hidden>
     <nav aria-label="Menú principal">
       <a href="#servicios">Servicios</a>
+      <a href="#talleres" data-talleres hidden>Talleres</a>
       <a href="#seccionGaleria" data-galeria hidden>Galería</a>
       <a href="#reservas">Reservas</a>
       <a href="#contacto">Horarios y contacto</a>
@@ -913,6 +935,18 @@
         <div class="srv-grid revelar" id="listaServicios">
           <span class="esq esq-fila"></span><span class="esq esq-fila"></span><span class="esq esq-fila"></span><span class="esq esq-fila"></span>
         </div>
+      </div>
+    </section>
+
+    <!-- ============ TALLERES ONLINE (aparece sola cuando hay talleres activos en el panel) ============ -->
+    <section class="seccion banda" id="talleres" hidden aria-labelledby="talleresTitulo">
+      <div class="wrap">
+        <header class="titulo-seccion revelar">
+          <div><span class="eyebrow">Formación online</span><h2 id="talleresTitulo">Talleres <em>online</em></h2></div>
+          <p>Clases en video para iniciarte desde cero en el mundo de la manicuría. Estudiás a tu ritmo, desde cualquier lugar del país.</p>
+        </header>
+        <div class="tll-grid" id="listaTalleres"></div>
+        <p class="tll-pie"><a href="aula.html">¿Ya compraste un taller? Entrá a tu aula</a></p>
       </div>
     </section>
 
@@ -1049,6 +1083,7 @@
       <div class="orn" aria-hidden="true"><i></i><b></b><i></i></div>
       <div class="pie-links">
         <a href="#servicios">Servicios</a>
+        <a href="#talleres" data-talleres hidden>Talleres</a>
         <a href="#reservas">Reservar turno</a>
         <a href="#contacto">Horarios y contacto</a>
       </div>
@@ -2843,6 +2878,71 @@
     })();
 
     iniciar();
+  </script>
+  <script>
+    // ---------- Talleres online: la sección y sus links aparecen solos si hay talleres activos ----------
+    (async function () {
+      try {
+        const r = await fetch(SUPABASE_URL + "/rest/v1/cursos?select=id,slug,nombre,descripcion,portada_url,precio,acceso_dias&activo=eq.true&order=orden.asc,id.asc", {
+          headers: { "apikey": SUPABASE_KEY }
+        });
+        if (!r.ok) return;                                   // si todavía no existen los talleres, no se muestra nada
+        const lista = await r.json();
+        if (!Array.isArray(lista) || !lista.length) return;
+
+        function duracion(dias) {
+          dias = Number(dias);
+          if (dias >= 30 && dias % 30 === 0) { const m = dias / 30; return m + (m === 1 ? " mes" : " meses"); }
+          return dias + " días";
+        }
+        // Promedio de opiniones de cada taller (si todavía no existe en la base, simplemente no se muestra)
+        const val = {};
+        try {
+          const rv = await fetch(SUPABASE_URL + "/rest/v1/rpc/cursos_valoracion", {
+            method: "POST", headers: { "apikey": SUPABASE_KEY, "Content-Type": "application/json" }, body: "{}"
+          });
+          if (rv.ok) (await rv.json()).forEach(function (v) { val[v.curso_id] = v; });
+        } catch (e) { /* sin valoraciones */ }
+        const cont = $("listaTalleres");
+        cont.replaceChildren();
+        lista.forEach(function (c) {
+          const card = el("article", "tll-card");
+          const portada = el("div", "tll-portada");
+          if (/^(https:\/\/|assets\/)/.test(c.portada_url || "")) {
+            const img = document.createElement("img");
+            img.src = c.portada_url; img.alt = ""; img.loading = "lazy"; img.decoding = "async";
+            img.onerror = function () { img.remove(); portada.classList.add("vacia"); };
+            portada.appendChild(img);
+          } else {
+            portada.classList.add("vacia");
+          }
+          const info = el("div", "tll-info");
+          info.appendChild(el("h3", "", c.nombre));
+          if (c.descripcion) info.appendChild(el("p", "tll-desc", c.descripcion));
+          const datos = el("ul", "tll-datos");
+          const v = val[c.id];
+          if (v && Number(v.cantidad) > 0) {
+            const li = el("li", "tll-valor", "★ " + String(v.promedio).replace(".", ",") + " · " + v.cantidad + (Number(v.cantidad) === 1 ? " opinión" : " opiniones"));
+            datos.appendChild(li);
+          }
+          datos.appendChild(el("li", "", "Clases en video + material"));
+          datos.appendChild(el("li", "", "Acceso por " + duracion(c.acceso_dias)));
+          datos.appendChild(el("li", "", "Certificado al terminar"));
+          info.appendChild(datos);
+          const meta = el("div", "tll-meta");
+          meta.appendChild(el("span", "tll-precio", plata(c.precio)));
+          const a = el("a", "btn btn-oro", "Ver taller");
+          a.href = "aula.html?curso=" + encodeURIComponent(c.slug);
+          meta.appendChild(a);
+          info.appendChild(meta);
+          card.appendChild(portada);
+          card.appendChild(info);
+          cont.appendChild(card);
+        });
+        $("talleres").hidden = false;
+        document.querySelectorAll("[data-talleres]").forEach(function (x) { x.hidden = false; });
+      } catch (e) { /* sin conexión o sin talleres: la página sigue igual */ }
+    })();
   </script>
 </body>
 </html>

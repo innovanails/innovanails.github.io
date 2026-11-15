@@ -137,6 +137,12 @@
     /* ============ PANEL ============ */
     .top { position: sticky; top: 0; z-index: 30; background: rgba(234, 223, 204, .94); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border-bottom: 1px solid var(--linea); padding-top: env(safe-area-inset-top); }
     .top-in { max-width: 820px; margin: 0 auto; height: var(--top); padding: 0 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    :root { --areas: 46px; }
+    .areas { max-width: 820px; margin: 0 auto; height: var(--areas); padding: 0 16px 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .area { border: 1px solid var(--linea-2); background: transparent; color: var(--cafe, inherit); font: 600 11.5px var(--sans, inherit); letter-spacing: .14em; text-transform: uppercase; cursor: pointer; padding: 0 6px; }
+    .area.activa { background: var(--tinta); color: var(--papel, #fff); border-color: var(--tinta); }
+    body[data-area="cursos"] .tabs { display: none; }
+    body[data-area="cursos"] .contenido { padding-bottom: 40px; }
     .top-marca { min-width: 0; display: grid; gap: 5px; }
     .top-marca strong { display: block; font-family: var(--serif); font-size: 20px; font-weight: 400; letter-spacing: .1em; text-transform: uppercase; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--tinta); }
     .top-acc { display: flex; gap: 8px; align-items: center; }
@@ -144,6 +150,18 @@
     .contenido { max-width: 820px; margin: 0 auto; padding: 20px 16px calc(120px + env(safe-area-inset-bottom)); }
 
     /* Pestañas: abajo en el celular, arriba en la compu */
+    .cu-abrir { flex: 1; display: flex; justify-content: space-between; align-items: center; text-align: left; background: none; border: 0; padding: 4px 0; font: inherit; font-weight: 600; color: inherit; cursor: pointer; min-height: 40px; }
+    .cu-abrir span { color: var(--oro, #b08a4a); font-size: 22px; }
+    .cu-abrir[aria-expanded="true"] span { transform: rotate(90deg); }
+    .cu-prev { margin: 12px 0 4px; }
+    .cu-video { position: relative; aspect-ratio: 16 / 9; background: #000; display: grid; place-items: center; text-align: center; padding: 16px; }
+    .cu-video iframe, .cu-video video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #000; }
+    .marca-agua { position: absolute; z-index: 3; left: 5%; top: 8%; max-width: 90%; overflow: hidden; text-overflow: ellipsis; pointer-events: none; user-select: none; -webkit-user-select: none; white-space: nowrap; color: rgba(255, 255, 255, .38); font: 600 13px/1 var(--sans, sans-serif); text-shadow: 0 0 3px rgba(0, 0, 0, .75); animation: marcaMover 48s linear infinite; }
+    @keyframes marcaMover { 0%, 100% { left: 5%; top: 8%; } 25% { left: 45%; top: 14%; } 50% { left: 20%; top: 80%; } 75% { left: 50%; top: 52%; } }
+    @media (prefers-reduced-motion: reduce) { .marca-agua { animation: none; } }
+    .cu-subida { margin: 14px 0 6px; padding: 12px; border: 1px dashed var(--linea-2); }
+    .cu-subnav { display: flex; gap: 8px; margin: 0 0 14px; flex-wrap: wrap; }
+    .cu-subnav .btn { flex: 1 1 0; min-width: 96px; justify-content: center; }
     .tabs {
       position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
       background: rgba(246, 240, 228, .97); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-top: 1px solid var(--linea);
@@ -161,7 +179,7 @@
     .badge { position: absolute; top: 5px; left: calc(50% + 6px); min-width: 19px; height: 19px; padding: 0 5px; border-radius: 999px; background: var(--rojo); color: #fff; font: 600 11px var(--sans); display: grid; place-items: center; border: 2px solid var(--papel); }
     @media (max-width: 420px) { .tab { font-size: 9.5px; letter-spacing: .07em; } .tabs { padding-left: 2px; padding-right: 2px; } }
     @media (min-width: 900px) {
-      .tabs { position: sticky; top: var(--top); bottom: auto; max-width: 820px; margin: 0 auto; grid-template-columns: repeat(5, auto); justify-content: start; gap: 32px; padding: 0 16px; background: rgba(234, 223, 204, .94); border-top: 0; border-bottom: 1px solid var(--linea); z-index: 29; }
+      .tabs { position: sticky; top: calc(var(--top) + var(--areas)); bottom: auto; max-width: 820px; margin: 0 auto; grid-template-columns: repeat(5, auto); justify-content: start; gap: 32px; padding: 0 16px; background: rgba(234, 223, 204, .94); border-top: 0; border-bottom: 1px solid var(--linea); z-index: 29; }
       .tab { flex-direction: row; gap: 10px; padding: 18px 0; font-size: 11px; letter-spacing: .2em; }
       .tab::after { left: 0; right: 0; top: auto; bottom: -1px; }
       .tab svg { width: 17px; height: 17px; }
@@ -563,6 +581,27 @@
     .es-leyenda .es-b2 { background: #8a6d35; } .es-leyenda .es-b3 { background: #1c1c1c; }
     .btn-icono:hover, .sub-nav a:hover, .gal-barra button:hover:not(:disabled) { background: var(--camel); color: #14110d; border-color: var(--camel); }
   </style>
+  <style>
+    /* ============ TALLERES ONLINE ============ */
+    .cu-curso { background: var(--marfil); border: 1px solid var(--linea); padding: 14px 16px; }
+    .cu-cab { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; }
+    .cu-cab strong { font: 400 20px/1.25 var(--serif); color: var(--tinta); overflow-wrap: anywhere; }
+    .cu-meta { color: var(--suave); font-size: 14px; margin-top: 2px; }
+    .cu-tag { display: inline-block; font: 500 10.5px/1.4 var(--sans); letter-spacing: .16em; text-transform: uppercase; padding: 3px 8px; border: 1px solid var(--linea); color: var(--suave); }
+    .cu-tag.ok { color: var(--ok); border-color: rgba(127, 207, 149, .5); }
+    .cu-tag.mal { color: var(--rojo); border-color: rgba(240, 138, 124, .5); }
+    .cu-tag.aviso { color: var(--bronce); }
+    .cu-edit { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--linea); }
+    .cu-edit h3 { font: 400 22px/1.2 var(--serif); color: var(--tinta); margin: 22px 0 8px; }
+    .cu-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .cu-leccion { border: 1px solid var(--linea); padding: 12px; margin-bottom: 10px; }
+    .cu-acc { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .cu-acc .btn { --alto: 38px; padding: 0 14px; font-size: 10.5px; letter-spacing: .16em; }
+    .cu-check { display: flex; align-items: center; gap: 10px; margin: 6px 0 14px; font-size: 15px; }
+    .cu-check input { width: 20px; height: 20px; accent-color: var(--oro-fino); }
+    .cu-nota-mal { color: var(--rojo); font-size: 13.5px; margin-top: 6px; overflow-wrap: anywhere; }
+    .cu-mat { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--linea); overflow-wrap: anywhere; }
+  </style>
 </head>
 <body>
 
@@ -603,6 +642,10 @@
           <button id="salir" class="btn btn-borde btn-chico" type="button">Salir</button>
         </div>
       </div>
+      <nav class="areas" id="areas" aria-label="Áreas del panel">
+        <button type="button" class="area activa" data-area="studio" aria-pressed="true">Innova Nails Studio</button>
+        <button type="button" class="area" data-area="cursos" aria-pressed="false">Talleres y cursos</button>
+      </nav>
     </header>
 
     <nav class="tabs" aria-label="Secciones del panel">
@@ -701,6 +744,52 @@
           <div class="titulo-lista"><h2>Señas cobradas</h2><span id="pTotal" class="total"></span></div>
           <p class="nota">Turnos de hoy en adelante que ya pagaron la seña.</p>
           <div id="pCobradas" class="agenda"></div>
+        </div>
+      </section>
+
+      <!-- TALLERES ONLINE: cursos, lecciones, material, alumnas y devoluciones -->
+      <section id="vCursos" class="vista" hidden aria-labelledby="cuTitulo">
+        <nav class="cu-subnav" id="cuSubnav" aria-label="Secciones de talleres">
+          <button type="button" class="btn btn-oro btn-chico" data-sub="cuPaneAlumnas" aria-pressed="true">Alumnas</button>
+          <button type="button" class="btn btn-borde btn-chico" data-sub="cuPaneTalleres" aria-pressed="false">Talleres</button>
+          <button type="button" class="btn btn-borde btn-chico" data-sub="cuPaneOpiniones" aria-pressed="false">Opiniones</button>
+        </nav>
+        <div id="cuPaneAlumnas" class="cu-pane">
+        <div class="stats" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
+          <div class="stat"><small>Alumnas activas</small><strong class="oro" id="cuStActivas">—</strong><span id="cuStActivasSub">&nbsp;</span></div>
+          <div class="stat"><small>Cobrado</small><strong id="cuStCobrado">—</strong><span id="cuStCobradoSub">&nbsp;</span></div>
+          <div class="stat"><small>Para revisar</small><strong id="cuStRevisar">—</strong><span id="cuStRevisarSub">&nbsp;</span></div>
+        </div>
+        <div class="tarjeta">
+          <div class="titulo-lista">
+            <h2>Alumnas</h2>
+            <select id="cuFiltro" class="input input-chico" aria-label="Filtrar alumnas">
+              <option value="todas">Todas</option>
+              <option value="activas">Con acceso activo</option>
+              <option value="sin_empezar">Sin empezar (3+ días)</option>
+              <option value="frenadas">Frenadas (7+ días sin avanzar)</option>
+              <option value="pendientes">Sin pagar</option>
+              <option value="cerradas">Vencidas o reembolsadas</option>
+            </select>
+          </div>
+          <p class="nota">Cada alumna aparece cuando Mercado Pago aprueba su pago. Para devolver el dinero primero tocá “Reembolsar” (corta el acceso al instante) y después devolvelo desde tu cuenta de Mercado Pago.</p>
+          <div id="cuAlumnas" class="agenda"></div>
+        </div>
+        </div>
+        <div id="cuPaneTalleres" class="cu-pane" hidden>
+        <div class="tarjeta">
+          <div class="titulo-lista"><h2 id="cuTitulo">Mis talleres</h2><button id="cuNuevo" class="btn btn-borde btn-chico" type="button">Nuevo taller</button></div>
+          <p class="nota">Cargá cada taller con sus clases en video y el material. Un taller recién creado queda <strong>oculto</strong> hasta que lo marques como visible.</p>
+          <p class="nota" id="cuEstado" role="status"></p>
+          <div id="cuLista" class="agenda"></div>
+        </div>
+        </div>
+        <div id="cuPaneOpiniones" class="cu-pane" hidden>
+        <div class="tarjeta">
+          <h2>Opiniones de las alumnas</h2>
+          <p class="nota">Las opiniones nuevas no se publican solas: aprobalas para que se vean. Si alguna no corresponde, dejala sin publicar (la alumna sigue viéndola) o borrala.</p>
+          <div id="cuResenas" class="agenda"></div>
+        </div>
         </div>
       </section>
 
@@ -1293,9 +1382,645 @@
     $("formVerificar").addEventListener("submit", function (e) { e.preventDefault(); verificarTurno($("vCodigo").value); });
     $("vEscanear").onclick = escanearConCamara;
 
+    // ---------- Talleres online ----------
+    const CU = { cursos: [], filas: [], lecciones: {}, materiales: {}, abierto: null };
+
+    async function cuLeer(ruta) {
+      const r = await api(ruta);
+      if (!r.ok) throw new Error("Error " + r.status);
+      return r.json();
+    }
+    // Escribe en la base; con `devolver` pide de vuelta la fila creada
+    async function cuEnviar(metodo, ruta, cuerpo, devolver) {
+      const r = await api(ruta, {
+        method: metodo,
+        headers: { "Prefer": devolver ? "return=representation" : "return=minimal" },
+        body: cuerpo === undefined ? undefined : JSON.stringify(cuerpo)
+      });
+      if (!r.ok) {
+        let detalle = "";
+        try { detalle = (await r.json()).message || ""; } catch (e) { /* sin detalle */ }
+        throw new Error(detalle || "Error " + r.status);
+      }
+      return devolver ? r.json() : null;
+    }
+    function cuFecha(iso) {
+      const d = new Date(iso);
+      return isNaN(d) ? "" : d.toLocaleDateString("es-AR", { day: "numeric", month: "short", year: "numeric" });
+    }
+    function cuDias(iso) { return iso ? Math.floor((Date.now() - new Date(iso).getTime()) / 86400000) : null; }
+    function cuSlug(nombre) {
+      let s = String(nombre || "taller").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 50);
+      if (s.length < 3) s = "taller";
+      const usados = CU.cursos.map(function (c) { return c.slug; });
+      let u = s, n = 2;
+      while (usados.indexOf(u) !== -1) u = s + "-" + n++;
+      return u;
+    }
+    function cuEstadoDe(f) {
+      const vencida = f.vence && new Date(f.vence) < new Date();
+      if (f.estado === "activa") return vencida ? { k: "cerrada", t: "Vencida", c: "mal" } : { k: "activa", t: "Activa", c: "ok" };
+      if (f.estado === "pendiente") return { k: "pendiente", t: "Sin pagar", c: "aviso" };
+      if (f.estado === "reembolsada") return { k: "cerrada", t: "Reembolsada", c: "mal" };
+      return { k: "cerrada", t: "Vencida", c: "mal" };
+    }
+    function cuCampo(etiqueta, control) {
+      const l = el("label", "campo");
+      l.appendChild(el("span", "", etiqueta));
+      l.appendChild(control);
+      return l;
+    }
+    function cuInput(tipo, valor, atributos) {
+      const i = el("input", "input");
+      i.type = tipo;
+      i.value = valor == null ? "" : valor;
+      Object.keys(atributos || {}).forEach(function (k) { i.setAttribute(k, atributos[k]); });
+      return i;
+    }
+    function cuTexto(valor, filas, max) {
+      const t = el("textarea", "input");
+      t.rows = filas || 3; t.maxLength = max || 600; t.value = valor || "";
+      return t;
+    }
+    function cuBoton(texto, fn, clase) {
+      const b = el("button", "btn " + (clase || "btn-borde") + " btn-chico", texto);
+      b.type = "button";
+      b.onclick = fn;
+      return b;
+    }
+    function cuErrorTablas(e) {
+      return /404|42P01|does not exist|schema cache/i.test(String(e && e.message));
+    }
+
+    async function cargarCursos() {
+      const estado = $("cuEstado");
+      estado.textContent = "Cargando...";
+      try {
+        const res = await Promise.all([
+          cuLeer("/rest/v1/cursos?select=*&order=orden.asc,id.asc"),
+          api("/rest/v1/rpc/cursos_resumen", { method: "POST", body: "{}" }).then(function (r) { if (!r.ok) throw new Error("Error " + r.status); return r.json(); })
+        ]);
+        CU.cursos = res[0];
+        CU.filas = res[1] && res[1].ok ? res[1].filas : [];
+        estado.textContent = "";
+        cuPintar();
+        cuCargarResenas();
+      } catch (e) {
+        estado.textContent = cuErrorTablas(e)
+          ? "La sección de talleres todavía no está instalada en tu base de datos. Pedile ayuda a quien armó tu página."
+          : "No pudimos cargar los talleres. Revisá tu conexión y tocá la pestaña de nuevo.";
+      }
+    }
+
+    function cuPintar() {
+      // Resumen
+      const activas = CU.filas.filter(function (f) { return cuEstadoDe(f).k === "activa"; });
+      const cobradas = CU.filas.filter(function (f) { return f.pago_id && (f.estado === "activa" || f.estado === "vencida"); });
+      const total = cobradas.reduce(function (a, f) { return a + Number(f.monto || 0); }, 0);
+      const revisar = CU.filas.filter(function (f) { return f.pago_nota && f.estado !== "reembolsada"; });
+      $("cuStActivas").textContent = String(activas.length);
+      $("cuStActivasSub").textContent = activas.length === 1 ? "con acceso hoy" : "con acceso hoy";
+      $("cuStCobrado").textContent = plata(total);
+      $("cuStCobradoSub").textContent = cobradas.length + (cobradas.length === 1 ? " venta" : " ventas");
+      $("cuStRevisar").textContent = String(revisar.length);
+      $("cuStRevisarSub").textContent = revisar.length ? "pagos con aviso" : "todo en orden";
+
+      // Talleres
+      const lista = $("cuLista");
+      lista.replaceChildren();
+      if (!CU.cursos.length) lista.appendChild(el("p", "nota", "Todavía no cargaste ningún taller. Tocá “Nuevo taller”."));
+      CU.cursos.forEach(function (c) {
+        const caja = el("div", "cu-curso");
+        const cab = el("div", "cu-cab");
+        const izq = el("div");
+        izq.appendChild(el("strong", "", c.nombre));
+        const cant = CU.filas.filter(function (f) { return f.curso === c.nombre && cuEstadoDe(f).k === "activa"; }).length;
+        izq.appendChild(el("div", "cu-meta", plata(c.precio) + " · acceso " + c.acceso_dias + " días · " + cant + (cant === 1 ? " alumna activa" : " alumnas activas")));
+        cab.appendChild(izq);
+        const der = el("div", "cu-acc");
+        der.style.marginTop = "0";
+        der.appendChild(el("span", "cu-tag " + (c.activo ? "ok" : "aviso"), c.activo ? "Visible" : "Oculto"));
+        der.appendChild(cuBoton(CU.abierto === c.id ? "Cerrar" : "Editar", function () { cuAlternar(c.id); }));
+        cab.appendChild(der);
+        caja.appendChild(cab);
+        if (CU.abierto === c.id) caja.appendChild(cuEditor(c));
+        lista.appendChild(caja);
+      });
+      cuPintarAlumnas();
+    }
+
+    async function cuAlternar(id) {
+      if (CU.abierto === id) { CU.abierto = null; return cuPintar(); }
+      CU.abierto = id;
+      try {
+        const res = await Promise.all([
+          cuLeer("/rest/v1/lecciones?select=*&curso_id=eq." + id + "&order=orden.asc,id.asc"),
+          cuLeer("/rest/v1/materiales?select=*&curso_id=eq." + id + "&order=orden.asc,id.asc")
+        ]);
+        CU.lecciones[id] = res[0]; CU.materiales[id] = res[1];
+      } catch (e) { aviso("error", "No pudimos cargar las lecciones."); CU.abierto = null; }
+      cuPintar();
+    }
+
+    async function cuNuevoTaller() {
+      const orden = CU.cursos.reduce(function (m, c) { return Math.max(m, c.orden); }, 0) + 1;
+      try {
+        const fila = await cuEnviar("POST", "/rest/v1/cursos", { slug: cuSlug("taller-nuevo"), nombre: "Taller nuevo", descripcion: "", precio: 48000, acceso_dias: 90, activo: false, orden: orden }, true);
+        await cargarCursos();
+        aviso("ok", "Taller creado. Completá sus datos.");
+        if (fila && fila[0]) cuAlternar(fila[0].id);
+      } catch (e) { aviso("error", "No pudimos crear el taller."); }
+    }
+
+    function cuEditor(c) {
+      const cont = el("div", "cu-edit");
+      const nombre = cuInput("text", c.nombre, { maxlength: "80" });
+      const desc = cuTexto(c.descripcion, 3, 600);
+      const precio = cuInput("number", c.precio, { min: "0", step: "1", inputmode: "numeric" });
+      const dias = cuInput("number", c.acceso_dias, { min: "1", max: "3650", step: "1", inputmode: "numeric" });
+      const portada = cuInput("text", c.portada_url, { placeholder: "https://... (opcional)" });
+      const orden = cuInput("number", c.orden, { step: "1" });
+      const activo = cuInput("checkbox", "");
+      activo.checked = !!c.activo;
+      activo.className = "";
+
+      cont.appendChild(cuCampo("Nombre del taller", nombre));
+      cont.appendChild(cuCampo("Descripción corta", desc));
+      const fila = el("div", "cu-2");
+      fila.appendChild(cuCampo("Precio total ($)", precio));
+      fila.appendChild(cuCampo("Días de acceso", dias));
+      cont.appendChild(fila);
+      const fila2 = el("div", "cu-2");
+      fila2.appendChild(cuCampo("Foto de portada (link)", portada));
+      fila2.appendChild(cuCampo("Orden en la lista", orden));
+      cont.appendChild(fila2);
+      const ver = el("label", "cu-check");
+      ver.appendChild(activo);
+      ver.appendChild(el("span", "", "Visible para las clientas (a la venta)"));
+      cont.appendChild(ver);
+
+      const acc = el("div", "cu-acc");
+      const guardar = cuBoton("Guardar taller", async function () {
+        const n = nombre.value.trim(), p = Math.round(Number(precio.value)), d = Math.round(Number(dias.value)), po = portada.value.trim();
+        if (n.length < 3 || n.length > 80) return aviso("error", "El nombre tiene que tener entre 3 y 80 letras.");
+        if (!(p >= 0)) return aviso("error", "Revisá el precio.");
+        if (!(d >= 1 && d <= 3650)) return aviso("error", "Los días de acceso tienen que ser entre 1 y 3650.");
+        if (po && !/^(https:\/\/|assets\/)/.test(po)) return aviso("error", "El link de la foto tiene que empezar con https://");
+        if (activo.checked && p <= 0) return aviso("error", "Para ponerlo a la venta tiene que tener un precio.");
+        const sinClases = !(CU.lecciones[c.id] || []).some(function (l) { return l.activo; });
+        if (activo.checked && sinClases && !confirm("Este taller todavía no tiene lecciones activas. ¿Querés mostrarlo igual?")) return;
+        guardar.disabled = true;
+        try {
+          await cuEnviar("PATCH", "/rest/v1/cursos?id=eq." + c.id, { nombre: n, descripcion: desc.value.trim(), precio: p, acceso_dias: d, portada_url: po, orden: Math.round(Number(orden.value)) || 0, activo: activo.checked });
+          aviso("ok", "Taller guardado.");
+          const abierto = CU.abierto;
+          await cargarCursos();
+          CU.abierto = abierto; cuPintar();
+        } catch (e) { aviso("error", "No pudimos guardar el taller."); }
+        guardar.disabled = false;
+      }, "");
+      acc.appendChild(guardar);
+      const prev = el("a", "btn btn-borde btn-chico", "Ver como alumna");
+      prev.href = "aula.html?curso=" + encodeURIComponent(c.slug); prev.target = "_blank"; prev.rel = "noopener";
+      acc.appendChild(prev);
+      cont.appendChild(acc);
+
+      // Lecciones
+      cont.appendChild(el("h3", "", "Lecciones"));
+      cont.appendChild(el("p", "nota", "En cada lección elegís cómo poner el video: subirlo directo desde el celular o la compu, o pegar un link (YouTube “no listado”, Google Drive, Vimeo o Bunny); en todos los casos el video se ve dentro de la página del taller. También podés adjuntar un PDF a la clase que quieras."));
+      (CU.lecciones[c.id] || []).forEach(function (l) { cont.appendChild(cuLeccion(c, l)); });
+      cont.appendChild(cuBoton("Agregar lección", function () { cuAgregarLeccion(c); }));
+
+      // Material
+      cont.appendChild(el("h3", "", "Material general del taller (se ve en todas las clases)"));
+      (CU.materiales[c.id] || []).filter(function (m) { return m.leccion_id == null; }).forEach(function (m) {
+        const fm = el("div", "cu-mat");
+        fm.appendChild(el("span", "", m.titulo));
+        fm.appendChild(cuBoton("Quitar", function () { cuQuitarMaterial(c, m); }, "btn-peligro"));
+        cont.appendChild(fm);
+      });
+      const archivo = cuInput("file", "", { accept: ".pdf,.png,.jpg,.jpeg,.docx,.xlsx,.zip" });
+      const titulo = cuInput("text", "", { maxlength: "100", placeholder: "Nombre que van a ver (ej. Lista de materiales)" });
+      cont.appendChild(cuCampo("Subir archivo (hasta 20 MB)", archivo));
+      cont.appendChild(cuCampo("Nombre del material", titulo));
+      const subir = cuBoton("Subir material", function () { cuSubirMaterial(c, archivo, titulo, subir); });
+      cont.appendChild(subir);
+      return cont;
+    }
+
+    function cuLeccion(c, l) {
+      const caja = el("div", "cu-leccion");
+      const titulo = cuInput("text", l.titulo, { maxlength: "100" });
+      const video = cuInput("text", l.video_url, { placeholder: "https://..." });
+      const minutos = cuInput("number", l.minutos, { min: "0", max: "600", step: "1", inputmode: "numeric" });
+      const orden = cuInput("number", l.orden, { step: "1" });
+      const desc = cuTexto(l.descripcion, 3, 1500);
+      const activa = cuInput("checkbox", "");
+      activa.checked = !!l.activo; activa.className = "";
+      caja.appendChild(cuCampo("Título", titulo));
+      caja.appendChild(cuCampo("Link del video (si no subís uno)", video));
+      // Subir el video directo
+      const sv = el("div", "cu-subida");
+      if (l.video_path) {
+        const fv = el("div", "cu-mat");
+        fv.appendChild(el("span", "", "✓ Video subido (es el que ven las alumnas)"));
+        fv.appendChild(cuBoton("Quitar video", async function () {
+          if (!confirm("¿Quitar el video subido de esta clase?")) return;
+          try {
+            await cuEnviar("PATCH", "/rest/v1/lecciones?id=eq." + l.id, { video_path: null });
+            cuQuitarArchivo("cursos-videos", l.video_path);
+            CU.lecciones[c.id] = await cuLeer("/rest/v1/lecciones?select=*&curso_id=eq." + c.id + "&order=orden.asc,id.asc");
+            cuPintar();
+          } catch (e) { aviso("error", "No pudimos quitar el video."); }
+        }, "btn-peligro"));
+        sv.appendChild(fv);
+      }
+      const archV = cuInput("file", "", { accept: "video/mp4,video/quicktime,video/webm,.mp4,.mov,.webm" });
+      const estV = el("p", "nota", ""); estV.setAttribute("role", "status");
+      sv.appendChild(cuCampo(l.video_path ? "Reemplazar el video (MP4 o MOV, hasta 1 GB)" : "O subir el video desde tu celular o compu (MP4 o MOV, hasta 1 GB)", archV));
+      const subV = cuBoton("Subir video", function () { cuSubirVideo(c, l, archV, estV, subV); });
+      sv.appendChild(subV); sv.appendChild(estV);
+      caja.appendChild(sv);
+      const prevCaja = el("div", "cu-prev"); prevCaja.hidden = true;
+      const verPrev = cuBoton("Ver como la ve la alumna", function () { cuVistaPrevia(l, video.value, prevCaja); });
+      caja.appendChild(verPrev);
+      caja.appendChild(prevCaja);
+      const f = el("div", "cu-2");
+      f.appendChild(cuCampo("Minutos", minutos));
+      f.appendChild(cuCampo("Orden", orden));
+      caja.appendChild(f);
+      caja.appendChild(cuCampo("Texto de la clase (opcional)", desc));
+      const v = el("label", "cu-check");
+      v.appendChild(activa);
+      v.appendChild(el("span", "", "Visible para las alumnas"));
+      caja.appendChild(v);
+      // PDF u otro archivo de esta clase
+      const sm = el("div", "cu-subida");
+      sm.appendChild(el("p", "nota", "Material de esta clase (solo se ve acá)"));
+      (CU.materiales[c.id] || []).filter(function (m) { return m.leccion_id === l.id; }).forEach(function (m) {
+        const fm = el("div", "cu-mat");
+        fm.appendChild(el("span", "", m.titulo));
+        fm.appendChild(cuBoton("Quitar", function () { cuQuitarMaterial(c, m); }, "btn-peligro"));
+        sm.appendChild(fm);
+      });
+      const archM = cuInput("file", "", { accept: ".pdf,.png,.jpg,.jpeg,.docx,.xlsx,.zip" });
+      const titM = cuInput("text", "", { maxlength: "100", placeholder: "Nombre que van a ver (ej. Guía de la clase)" });
+      sm.appendChild(cuCampo("Archivo (hasta 20 MB)", archM));
+      sm.appendChild(cuCampo("Nombre del material", titM));
+      const subM = cuBoton("Subir material a esta clase", function () { cuSubirMaterial(c, archM, titM, subM, l.id); });
+      sm.appendChild(subM);
+      caja.appendChild(sm);
+
+      const acc = el("div", "cu-acc");
+      const guardar = cuBoton("Guardar lección", async function () {
+        const t = titulo.value.trim(), vu = video.value.trim(), m = Math.round(Number(minutos.value)) || 0;
+        if (t.length < 2) return aviso("error", "Escribí el título de la lección.");
+        if (vu && !/^https:\/\//.test(vu)) return aviso("error", "El link del video tiene que empezar con https://");
+        if (m < 0 || m > 600) return aviso("error", "Los minutos tienen que ser entre 0 y 600.");
+        guardar.disabled = true;
+        try {
+          await cuEnviar("PATCH", "/rest/v1/lecciones?id=eq." + l.id, { titulo: t, video_url: vu, minutos: m, orden: Math.round(Number(orden.value)) || 0, descripcion: desc.value.trim(), activo: activa.checked });
+          aviso("ok", "Lección guardada.");
+          CU.lecciones[c.id] = await cuLeer("/rest/v1/lecciones?select=*&curso_id=eq." + c.id + "&order=orden.asc,id.asc");
+          cuPintar();
+        } catch (e) { aviso("error", "No pudimos guardar la lección."); }
+        guardar.disabled = false;
+      }, "");
+      acc.appendChild(guardar);
+      acc.appendChild(cuBoton("Borrar", async function () {
+        if (!confirm("¿Borrar esta lección? También se borra el avance de las alumnas en ella. Si solo querés esconderla, desmarcá “Visible para las alumnas”.")) return;
+        try {
+          await cuEnviar("DELETE", "/rest/v1/lecciones?id=eq." + l.id);
+          if (l.video_path) cuQuitarArchivo("cursos-videos", l.video_path);
+          CU.lecciones[c.id] = CU.lecciones[c.id].filter(function (x) { return x.id !== l.id; });
+          cuPintar();
+        } catch (e) { aviso("error", "No pudimos borrar la lección."); }
+      }, "btn-peligro"));
+      caja.appendChild(acc);
+      return caja;
+    }
+
+    async function cuAgregarLeccion(c) {
+      const orden = (CU.lecciones[c.id] || []).reduce(function (m, l) { return Math.max(m, l.orden); }, 0) + 1;
+      try {
+        await cuEnviar("POST", "/rest/v1/lecciones", { curso_id: c.id, orden: orden, titulo: "Lección nueva", activo: false });
+        CU.lecciones[c.id] = await cuLeer("/rest/v1/lecciones?select=*&curso_id=eq." + c.id + "&order=orden.asc,id.asc");
+        aviso("ok", "Lección agregada: completala y marcala como visible.");
+        cuPintar();
+      } catch (e) { aviso("error", "No pudimos agregar la lección."); }
+    }
+
+    // Convierte el link pegado en el link para incrustar (igual que en el aula); vacío si no se puede
+    function cuEmbedDe(url) {
+      let u;
+      try { u = new URL(url); } catch (e) { return ""; }
+      if (u.protocol !== "https:") return "";
+      const h = u.hostname.replace(/^www\./, "");
+      let m;
+      if (h === "youtu.be") { m = u.pathname.match(/^\/([\w-]{6,20})/); return m ? "https://www.youtube-nocookie.com/embed/" + m[1] : ""; }
+      if (h === "youtube.com" || h === "youtube-nocookie.com") {
+        if ((m = u.pathname.match(/^\/embed\/([\w-]{6,20})/))) return "https://www.youtube-nocookie.com/embed/" + m[1];
+        const id = u.searchParams.get("v");
+        return id && /^[\w-]{6,20}$/.test(id) ? "https://www.youtube-nocookie.com/embed/" + id : "";
+      }
+      if (h === "vimeo.com") { m = u.pathname.match(/^\/(\d+)(?:\/([0-9a-f]+))?/i); return m ? "https://player.vimeo.com/video/" + m[1] + (m[2] ? "?h=" + m[2] : "") : ""; }
+      if (h === "player.vimeo.com") { m = u.pathname.match(/^\/video\/(\d+)/); return m ? "https://player.vimeo.com/video/" + m[1] + (u.search || "") : ""; }
+      if (h === "drive.google.com") {
+        m = u.pathname.match(/^\/file\/d\/([\w-]{10,80})/);
+        const idd = m ? m[1] : u.searchParams.get("id");
+        return idd && /^[\w-]{10,80}$/.test(idd) ? "https://drive.google.com/file/d/" + idd + "/preview" : "";
+      }
+      if (h === "iframe.mediadelivery.net") { m = u.pathname.match(/^\/(?:embed|play)\/(\d+)\/([0-9a-f-]{36})/i); return m ? "https://iframe.mediadelivery.net/embed/" + m[1] + "/" + m[2] : ""; }
+      return "";
+    }
+    // Vista previa: Nena ve la clase como la ve la alumna (con el link escrito o el video subido), con la marca de agua de ejemplo
+    async function cuVistaPrevia(l, link, caja) {
+      caja.hidden = false;
+      caja.replaceChildren();
+      const marco = el("div", "cu-video");
+      const marca = el("div", "marca-agua", "email-de-la-alumna@ejemplo.com");
+      marca.setAttribute("aria-hidden", "true");
+      const valor = link.trim();
+      const msg = function (t) { const p = el("p", "nota", t); p.style.color = "#cfc7b6"; marco.insertBefore(p, marca); };
+      marco.appendChild(marca);
+      caja.appendChild(marco);
+      caja.appendChild(el("p", "nota", "Así se ve la clase para la alumna: el email de ella aparece flotando sobre el video."));
+      if (l.video_path) {
+        msg("Cargando el video...");
+        try {
+          const r = await api("/storage/v1/object/sign/cursos-videos/" + l.video_path.split("/").map(encodeURIComponent).join("/"), { method: "POST", body: JSON.stringify({ expiresIn: 600 }) });
+          const d = r.ok ? await r.json() : null;
+          if (!d || !d.signedURL) throw new Error("firma");
+          const v = document.createElement("video");
+          v.controls = true; v.playsInline = true; v.preload = "metadata";
+          v.src = SUPABASE_URL + "/storage/v1" + d.signedURL;
+          marco.replaceChildren(v, marca);
+        } catch (e) { marco.querySelector("p").textContent = "No pudimos cargar el video subido."; }
+        return;
+      }
+      if (!valor) return msg("Esta lección todavía no tiene video.");
+      const emb = cuEmbedDe(valor);
+      if (emb) {
+        const f = document.createElement("iframe");
+        f.setAttribute("sandbox", "allow-scripts allow-same-origin allow-presentation allow-popups allow-popups-to-escape-sandbox"); f.src = emb; f.title = "Vista previa"; f.allow = "fullscreen; encrypted-media"; f.referrerPolicy = "strict-origin-when-cross-origin"; f.allowFullscreen = true;
+        marco.insertBefore(f, marca);
+        return;
+      }
+      if (/^https:\/\//.test(valor)) return msg("Este link no se puede mostrar dentro de la página (por ejemplo, una carpeta o un video privado). Las alumnas verían un botón “Abrir el video”. Revisá que sea un video de YouTube (no listado), Drive, Vimeo o Bunny.");
+      msg("El link tiene que empezar con https://");
+    }
+
+    // Sube un archivo grande con porcentaje de avance (fetch no informa el progreso)
+    function cuSubirConProgreso(ruta, archivo, alProgreso) {
+      return new Promise(function (resolve, reject) {
+        let reintento = false;
+        function enviar() {
+          const x = new XMLHttpRequest();
+          x.open("POST", SUPABASE_URL + "/storage/v1/object/" + ruta);
+          x.setRequestHeader("apikey", SUPABASE_KEY);
+          x.setRequestHeader("Authorization", "Bearer " + token);
+          x.setRequestHeader("Content-Type", archivo.type || "application/octet-stream");
+          x.setRequestHeader("x-upsert", "false");
+          if (x.upload) x.upload.onprogress = function (e) { if (e.lengthComputable) alProgreso(Math.round(e.loaded * 100 / e.total)); };
+          x.onload = async function () {
+            if (x.status === 401 && !reintento) { reintento = true; if (await renovar()) return enviar(); }
+            if (x.status >= 200 && x.status < 300) return resolve();
+            const e = new Error("subida"); e.status = x.status; reject(e);
+          };
+          x.onerror = function () { reject(new Error("red")); };
+          x.ontimeout = function () { reject(new Error("red")); };
+          x.send(archivo);
+        }
+        enviar();
+      });
+    }
+    function cuQuitarArchivo(bucket, ruta) {
+      return api("/storage/v1/object/" + bucket + "/" + String(ruta).split("/").map(encodeURIComponent).join("/"), { method: "DELETE" }).catch(function () { /* queda huérfano, no es grave */ });
+    }
+    async function cuSubirVideo(c, l, archivo, estado, boton) {
+      const f = archivo.files && archivo.files[0];
+      if (!f) return aviso("error", "Elegí un video.");
+      const ext = (f.name.match(/\.(mp4|mov|webm)$/i) || [])[1];
+      if (!ext || !/^video\//.test(f.type || "video/mp4")) return aviso("error", "El video tiene que ser MP4, MOV o WEBM.");
+      if (f.size > 1024 * 1024 * 1024) return aviso("error", "El video pesa más de 1 GB. Comprimilo o subilo a YouTube (oculto) y pegá el link.");
+      const ruta = c.id + "/" + l.id + "-" + Date.now() + "." + ext.toLowerCase();
+      boton.disabled = true; archivo.disabled = true;
+      estado.textContent = "Subiendo... 0%. No cierres esta pantalla.";
+      try {
+        await cuSubirConProgreso("cursos-videos/" + ruta, f, function (n) { estado.textContent = "Subiendo... " + n + "%. No cierres esta pantalla."; });
+        await cuEnviar("PATCH", "/rest/v1/lecciones?id=eq." + l.id, { video_path: ruta });
+        if (l.video_path) cuQuitarArchivo("cursos-videos", l.video_path);
+        CU.lecciones[c.id] = await cuLeer("/rest/v1/lecciones?select=*&curso_id=eq." + c.id + "&order=orden.asc,id.asc");
+        aviso("ok", "Video subido. Las alumnas ya lo ven en esta clase.");
+        cuPintar();
+      } catch (e) {
+        estado.textContent = "";
+        aviso("error", e && e.status === 413
+          ? "El video es más grande de lo que permite tu plan de almacenamiento. Subilo a YouTube (oculto) o Vimeo y pegá el link."
+          : "No pudimos subir el video. Revisá tu conexión y probá de nuevo.");
+        boton.disabled = false; archivo.disabled = false;
+      }
+    }
+
+    async function cuSubirMaterial(c, archivo, titulo, boton, leccion) {
+      const f = archivo.files && archivo.files[0];
+      if (!f) return aviso("error", "Elegí un archivo.");
+      if (f.size > 20 * 1024 * 1024) return aviso("error", "El archivo pesa más de 20 MB.");
+      const t = (titulo.value.trim() || f.name.replace(/\.[^.]+$/, "")).slice(0, 100);
+      if (t.length < 2) return aviso("error", "Escribí el nombre del material.");
+      const limpio = f.name.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^A-Za-z0-9._-]+/g, "-").slice(-80);
+      const ruta = c.id + "/" + Date.now() + "-" + limpio;
+      boton.disabled = true;
+      try {
+        const r = await api("/storage/v1/object/cursos-materiales/" + ruta.split("/").map(encodeURIComponent).join("/"), {
+          method: "POST",
+          headers: { "Content-Type": f.type || "application/octet-stream", "x-upsert": "false" },
+          body: f
+        });
+        if (!r.ok) throw new Error("subida");
+        const orden = (CU.materiales[c.id] || []).reduce(function (m, x) { return Math.max(m, x.orden); }, 0) + 1;
+        await cuEnviar("POST", "/rest/v1/materiales", leccion ? { curso_id: c.id, leccion_id: leccion, titulo: t, ruta: ruta, orden: orden } : { curso_id: c.id, titulo: t, ruta: ruta, orden: orden });
+        CU.materiales[c.id] = await cuLeer("/rest/v1/materiales?select=*&curso_id=eq." + c.id + "&order=orden.asc,id.asc");
+        aviso("ok", "Material subido.");
+        cuPintar();
+      } catch (e) { aviso("error", "No pudimos subir el archivo. Probá de nuevo."); }
+      boton.disabled = false;
+    }
+
+    async function cuQuitarMaterial(c, m) {
+      if (!confirm("¿Quitar “" + m.titulo + "”? Las alumnas dejan de verlo.")) return;
+      try {
+        await cuEnviar("DELETE", "/rest/v1/materiales?id=eq." + m.id);
+        api("/storage/v1/object/cursos-materiales/" + m.ruta.split("/").map(encodeURIComponent).join("/"), { method: "DELETE" }).catch(function () { /* el archivo queda huérfano, no es grave */ });
+        CU.materiales[c.id] = CU.materiales[c.id].filter(function (x) { return x.id !== m.id; });
+        cuPintar();
+      } catch (e) { aviso("error", "No pudimos quitar el material."); }
+    }
+
+    // ---------- Alumnas ----------
+    function cuMensajeWa(f) {
+      const primero = String(f.alumna || "").trim().split(/\s+/)[0] || "";
+      const negocio = nombreNegocio();
+      const est = cuEstadoDe(f);
+      if (est.k === "activa" && Number(f.hechas) === 0) {
+        return "Hola " + primero + "! Soy de " + negocio + ". Vi que todavía no empezaste el taller “" + f.curso + "”. Cualquier duda con el ingreso, escribime y te ayudo. Tenés acceso hasta el " + cuFecha(f.vence) + ".";
+      }
+      if (est.k === "activa" && Number(f.hechas) < Number(f.total)) {
+        return "Hola " + primero + "! Soy de " + negocio + ". Hace unos días que no avanzás en el taller “" + f.curso + "”. Seguí cuando quieras: tu acceso llega hasta el " + cuFecha(f.vence) + ". Cualquier duda, escribime.";
+      }
+      return "Hola " + primero + "! Te escribo de " + negocio + " por el taller “" + f.curso + "”.";
+    }
+
+    function cuPasaFiltro(f, filtro) {
+      const est = cuEstadoDe(f);
+      if (filtro === "activas") return est.k === "activa";
+      if (filtro === "pendientes") return est.k === "pendiente";
+      if (filtro === "cerradas") return est.k === "cerrada";
+      if (filtro === "sin_empezar") return est.k === "activa" && Number(f.hechas) === 0 && cuDias(f.inicio) >= 3;
+      if (filtro === "frenadas") {
+        if (est.k !== "activa" || Number(f.hechas) === 0 || Number(f.hechas) >= Number(f.total)) return false;
+        return cuDias(f.ultimo_avance) >= 7;
+      }
+      return true;
+    }
+
+    function cuPintarAlumnas() {
+      const cont = $("cuAlumnas");
+      cont.replaceChildren();
+      const filtro = $("cuFiltro").value;
+      const filas = CU.filas.filter(function (f) { return cuPasaFiltro(f, filtro); });
+      if (!filas.length) {
+        cont.appendChild(el("p", "nota", CU.filas.length ? "Nadie coincide con este filtro." : "Todavía no hay alumnas. Van a aparecer acá cuando se anoten."));
+        return;
+      }
+      filas.forEach(function (f) {
+        const est = cuEstadoDe(f);
+        const caja = el("div", "item-caja");
+        const cab = el("div", "cu-cab");
+        const tocar = el("button", "cu-abrir", f.alumna || "(sin nombre)");
+        tocar.type = "button"; tocar.setAttribute("aria-expanded", "false");
+        tocar.appendChild(el("span", "", "›"));
+        cab.appendChild(tocar);
+        cab.appendChild(el("span", "cu-tag " + est.c, est.t));
+        caja.appendChild(cab);
+        const det = el("div", "cu-det"); det.hidden = true;
+        tocar.onclick = function () { det.hidden = !det.hidden; tocar.setAttribute("aria-expanded", det.hidden ? "false" : "true"); tocar.firstChild.textContent = f.alumna || "(sin nombre)"; };
+        det.appendChild(el("div", "item-det", f.curso + " · " + plata(f.monto)));
+        det.appendChild(el("div", "item-det", [f.email, f.telefono].filter(Boolean).join(" · ")));
+        if (est.k === "activa" || (f.estado === "activa" || f.estado === "vencida")) {
+          const total = Number(f.total), hechas = Number(f.hechas);
+          let linea = hechas + " de " + total + " lecciones";
+          if (f.ultimo_avance) linea += " · último avance hace " + cuDias(f.ultimo_avance) + " d";
+          else if (est.k === "activa") linea += " · todavía no empezó";
+          if (f.ultimo_ingreso) linea += " · última vez que entró: " + cuFecha(f.ultimo_ingreso);
+          det.appendChild(el("div", "item-det", linea));
+          if (f.vence) det.appendChild(el("div", "item-det", (est.k === "activa" ? "Acceso hasta el " : "Venció el ") + cuFecha(f.vence)));
+        }
+        if (f.pago_nota && f.estado !== "reembolsada") det.appendChild(el("div", "cu-nota-mal", "Revisar: " + f.pago_nota));
+        const acc = el("div", "item-acc");
+        const wa = waNumero(f.telefono);
+        if (wa && wa.length >= 10 && f.estado !== "pendiente") {
+          const a = el("a", "btn btn-borde", "Escribir por WhatsApp");
+          a.href = "https://wa.me/" + wa + "?text=" + encodeURIComponent(cuMensajeWa(f));
+          a.target = "_blank"; a.rel = "noopener";
+          acc.appendChild(a);
+        }
+        if (f.estado === "activa") {
+          const b = el("button", "btn btn-peligro", "Reembolsar");
+          b.type = "button";
+          b.onclick = async function () {
+            if (!confirm("¿Reembolsar el taller de " + (f.alumna || "esta alumna") + "?\n\nVa a perder el acceso ahora mismo. Después tenés que devolverle el dinero desde tu cuenta de Mercado Pago" + (f.pago_id ? " (pago " + f.pago_id + ")" : "") + ".")) return;
+            b.disabled = true;
+            try {
+              const r = await api("/rest/v1/rpc/curso_reembolsar", { method: "POST", body: JSON.stringify({ p_inscripcion: f.id }) });
+              const d = r.ok ? await r.json() : null;
+              if (!d || !d.ok) throw new Error("reembolso");
+              aviso("ok", "Acceso cortado. Ahora devolvé el dinero desde Mercado Pago.");
+              const abierto = CU.abierto;
+              await cargarCursos();
+              CU.abierto = abierto; cuPintar();
+            } catch (e) { aviso("error", "No pudimos registrar el reembolso."); b.disabled = false; }
+          };
+          acc.appendChild(b);
+        }
+        if (acc.childNodes.length) det.appendChild(acc);
+        caja.appendChild(det);
+        cont.appendChild(caja);
+      });
+    }
+    $("cuFiltro").onchange = cuPintarAlumnas;
+    $("cuNuevo").onclick = cuNuevoTaller;
+
+    // ---------- Opiniones de las alumnas (moderación) ----------
+    async function cuCargarResenas() {
+      const cont = $("cuResenas");
+      try {
+        CU.resenas = await cuLeer("/rest/v1/resenas_cursos?select=id,estrellas,texto,visible,creado,cursos(nombre),alumnas(nombre)&order=creado.desc&limit=100");
+        cuPintarResenas();
+      } catch (e) {
+        cont.replaceChildren(el("p", "nota", cuErrorTablas(e) ? "Las opiniones todavía no están instaladas en tu base de datos." : "No pudimos cargar las opiniones."));
+      }
+    }
+    function cuPintarResenas() {
+      const cont = $("cuResenas");
+      cont.replaceChildren();
+      // Las que esperan aprobación van primero, y el botón de la pestaña avisa cuántas hay
+      const pend = CU.resenas.filter(function (x) { return !x.visible; }).length;
+      const bt = document.querySelector('[data-sub="cuPaneOpiniones"]');
+      if (bt) bt.textContent = pend ? "Opiniones (" + pend + " por aprobar)" : "Opiniones";
+      if (!CU.resenas.length) { cont.appendChild(el("p", "nota", "Todavía no hay opiniones.")); return; }
+      CU.resenas.slice().sort(function (x, y) { return (x.visible === y.visible) ? 0 : (x.visible ? 1 : -1); }).forEach(function (r) {
+        const caja = el("div", "item-caja");
+        const cab = el("div", "cu-cab");
+        const nombre = r.alumnas && r.alumnas.nombre ? r.alumnas.nombre : "(alumna)";
+        cab.appendChild(el("div", "item-nombre", nombre + "  " + "★★★★★".slice(0, r.estrellas) + "☆☆☆☆☆".slice(0, 5 - r.estrellas)));
+        cab.appendChild(el("span", "cu-tag " + (r.visible ? "ok" : "aviso"), r.visible ? "Publicada" : "Sin publicar"));
+        caja.appendChild(cab);
+        caja.appendChild(el("div", "item-det", (r.cursos && r.cursos.nombre ? r.cursos.nombre : "") + " · " + cuFecha(r.creado)));
+        caja.appendChild(el("div", "item-det", r.texto));
+        const acc = el("div", "item-acc");
+        const alternar = el("button", "btn btn-borde", r.visible ? "Dejar sin publicar" : "Aprobar y publicar");
+        alternar.type = "button";
+        alternar.onclick = async function () {
+          alternar.disabled = true;
+          try {
+            await cuEnviar("PATCH", "/rest/v1/resenas_cursos?id=eq." + r.id, { visible: !r.visible });
+            r.visible = !r.visible;
+            cuPintarResenas();
+          } catch (e) { aviso("error", "No pudimos cambiarla."); alternar.disabled = false; }
+        };
+        acc.appendChild(alternar);
+        const borrar = el("button", "btn btn-peligro", "Borrar");
+        borrar.type = "button";
+        borrar.onclick = async function () {
+          if (!confirm("¿Borrar esta opinión? No se puede deshacer. Si solo querés que no se vea, usá “Dejar sin publicar”.")) return;
+          try {
+            await cuEnviar("DELETE", "/rest/v1/resenas_cursos?id=eq." + r.id);
+            CU.resenas = CU.resenas.filter(function (x) { return x.id !== r.id; });
+            cuPintarResenas();
+          } catch (e) { aviso("error", "No pudimos borrarla."); }
+        };
+        acc.appendChild(borrar);
+        caja.appendChild(acc);
+        cont.appendChild(caja);
+      });
+    }
+
+    // Sub-pestañas de Talleres: Alumnas / Talleres / Opiniones
+    function cuSubir(id) {
+      ["cuPaneAlumnas", "cuPaneTalleres", "cuPaneOpiniones"].forEach(function (p) { $(p).hidden = p !== id; });
+      document.querySelectorAll("#cuSubnav button").forEach(function (b) {
+        const on = b.dataset.sub === id;
+        b.className = "btn btn-chico " + (on ? "btn-oro" : "btn-borde");
+        b.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+    }
+    document.querySelectorAll("#cuSubnav button").forEach(function (b) { b.onclick = function () { cuSubir(b.dataset.sub); }; });
+
     // ---------- Pestañas ----------
     function irA(vista) {
-      ["vAgenda", "vRecord", "vPagos", "vStats", "vConfig"].forEach(function (v) { $(v).hidden = v !== vista; });
+      if (vista !== "vCursos") S.ultimaVista = vista;
+      ["vAgenda", "vRecord", "vPagos", "vCursos", "vStats", "vConfig"].forEach(function (v) { $(v).hidden = v !== vista; });
       document.querySelectorAll(".tab").forEach(function (t) {
         const activa = t.dataset.vista === vista;
         t.classList.toggle("activo", activa);
@@ -1304,6 +2029,7 @@
       window.scrollTo(0, 0);
       if (vista === "vRecord") { cargarRecord(); crCargarRecord(); }
       if (vista === "vPagos") cargarPagos();
+      if (vista === "vCursos") cargarCursos();
       if (vista === "vStats") { abrirStats(); crCargarStats(); }
       if (vista === "vAgenda") cargar();
       if (vista === "vConfig") cargarRecibos();
@@ -3515,6 +4241,17 @@
       if (await preguntar("¿Cerrar sesión?", "Vas a tener que volver a entrar con tu email y contraseña.", "Sí, salir", false)) salir();
     };
     document.querySelectorAll(".tab").forEach(function (t) { t.onclick = function () { irA(t.dataset.vista); }; });
+    // Dos áreas separadas: el negocio de uñas (Studio) y los talleres/cursos online
+    function irArea(area) {
+      document.body.dataset.area = area;
+      document.querySelectorAll("#areas .area").forEach(function (b) {
+        const on = b.dataset.area === area;
+        b.classList.toggle("activa", on);
+        b.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+      irA(area === "cursos" ? "vCursos" : (S.ultimaVista || "vAgenda"));
+    }
+    document.querySelectorAll("#areas .area").forEach(function (b) { b.onclick = function () { irArea(b.dataset.area); }; });
 
     $("fecha").onchange = cargar;
     $("ant").onclick = function () { mover("fecha", -1, cargar); };
