@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0c">
+  <title>Botón de arrepentimiento y baja | Innova Nails</title>
+  <meta name="description" content="Pedí tu arrepentimiento o la baja de un servicio de Innova Nails, sin registrarte.">
+  <link rel="icon" type="image/png" href="assets/images/brand/nena-icono.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="legal.css">
+</head>
+<body>
+  <header class="top"><div class="wrap">
+    <a class="marca" href="index.html"><img src="assets/images/brand/nena-icono.png" alt="" onerror="this.remove()"><span>Innova Nails</span></a>
+    <a class="volver" href="index.html">‹ Volver al sitio</a>
+  </div></header>
+  <main><div class="wrap">
+    <section id="vForm">
+      <span class="eyebrow">Tu derecho como consumidor/a</span>
+      <h1 id="titulo">Botón de <em>arrepentimiento</em></h1>
+      <p id="bajada">Si te arrepentiste de tu compra, completá este formulario. <strong>No necesitás crear cuenta ni iniciar sesión.</strong> Tenés 10 días corridos desde la compra y te devolvemos el 100%.</p>
+
+      <form class="caja" id="form" novalidate>
+        <div class="opciones" role="radiogroup" aria-label="Qué querés hacer">
+          <label class="opcion"><input type="radio" name="tipo" value="arrepentimiento" checked><span><b>Me arrepentí de mi compra</b><small>Revocar la compra dentro de los 10 días y recuperar el dinero.</small></span></label>
+          <label class="opcion"><input type="radio" name="tipo" value="baja"><span><b>Quiero dar de baja un servicio</b><small>Dejar de usar el acceso a un taller contratado.</small></span></label>
+        </div>
+        <label class="campo"><span>Nombre y apellido</span><input class="input" id="nombre" autocomplete="name" maxlength="80" required></label>
+        <label class="campo"><span>Email con el que compraste</span><input class="input" id="email" type="email" autocomplete="email" maxlength="120" required></label>
+        <label class="campo"><span>WhatsApp (opcional)</span><input class="input" id="tel" type="tel" inputmode="tel" autocomplete="tel" maxlength="30" placeholder="Con código de área"></label>
+        <label class="campo"><span>¿Qué compraste o contrataste?</span><input class="input" id="ref" maxlength="160" placeholder="Ej.: Taller de Soft Gel"></label>
+        <label class="campo"><span>Algo que quieras contarnos (opcional)</span><textarea class="input" id="msg" maxlength="600"></textarea></label>
+        <p class="error" id="error" role="alert" hidden></p>
+        <button class="btn btn-bloque" id="enviar" type="submit">Enviar mi pedido</button>
+        <p class="ayuda" style="margin-top:14px">Usamos estos datos solo para gestionar tu pedido. Más información en la <a href="privacidad.html">política de privacidad</a>.</p>
+      </form>
+    </section>
+
+    <section id="vListo" hidden>
+      <span class="eyebrow">Pedido recibido</span>
+      <h1>Recibimos <em>tu pedido</em></h1>
+      <div class="caja">
+        <p style="margin:0">Este es el código que identifica tu pedido. <strong>Guardalo o sacale una captura.</strong></p>
+        <div class="codigo" id="codigo"></div>
+        <p class="ayuda" id="fecha" style="margin:0 0 16px"></p>
+        <p>Ya registramos tu solicitud. Nos vamos a comunicar con vos para confirmarla, y si corresponde, devolverte el dinero por el mismo medio de pago. Si querés que lo veamos más rápido, avisanos por WhatsApp.</p>
+        <p style="display:flex;gap:12px;flex-wrap:wrap;margin:20px 0 0">
+          <a class="btn" id="wa" href="#" target="_blank" rel="noopener">Avisar por WhatsApp</a>
+          <a class="btn btn-borde" href="index.html">Volver al sitio</a>
+        </p>
+      </div>
+    </section>
+  </div></main>
+  <footer class="pie-legal" id="pieLegal"></footer>
+  <script src="legal.js"></script>
+  <script>
+    (function () {
+      var URL_BASE = "https://kpmqesvijwgfthixetcx.supabase.co";
+      var KEY = "sb_publishable_-HEFq0BXXVAxEDTFJUoi_w_0TZ9DFKH";
+      var $ = function (id) { return document.getElementById(id); };
+      var radios = document.querySelectorAll('input[name="tipo"]');
+      function tipoActual() { return document.querySelector('input[name="tipo"]:checked').value; }
+      function ajustarTexto() {
+        var baja = tipoActual() === "baja";
+        $("titulo").replaceChildren(document.createTextNode("Botón de "), Object.assign(document.createElement("em"), { textContent: baja ? "baja de servicio" : "arrepentimiento" }));
+        $("bajada").textContent = baja
+          ? "Para dar de baja un servicio contratado, completá este formulario. No necesitás crear cuenta ni iniciar sesión."
+          : "Si te arrepentiste de tu compra, completá este formulario. No necesitás crear cuenta ni iniciar sesión. Tenés 10 días corridos desde la compra y te devolvemos el 100%.";
+      }
+      radios.forEach(function (r) { r.addEventListener("change", ajustarTexto); });
+      if (new URLSearchParams(location.search).get("tipo") === "baja") { document.querySelector('input[value="baja"]').checked = true; }
+      ajustarTexto();
+
+      var MSJ = {
+        nombre: "Escribí tu nombre y apellido.",
+        email: "Revisá el email: parece que no está bien escrito.",
+        muy_rapido: "Ya recibimos varios pedidos con este email. Escribinos por WhatsApp y lo resolvemos enseguida.",
+        tipo: "No pudimos procesar el pedido. Probá de nuevo."
+      };
+      function fallo(t) { var e = $("error"); e.textContent = t; e.hidden = false; $("enviar").disabled = false; $("enviar").textContent = "Enviar mi pedido"; }
+
+      $("form").addEventListener("submit", async function (ev) {
+        ev.preventDefault();
+        $("error").hidden = true;
+        var nombre = $("nombre").value.trim(), email = $("email").value.trim();
+        if (nombre.length < 2) { $("nombre").focus(); return fallo(MSJ.nombre); }
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { $("email").focus(); return fallo(MSJ.email); }
+        $("enviar").disabled = true; $("enviar").textContent = "Enviando...";
+        try {
+          var r = await fetch(URL_BASE + "/rest/v1/rpc/arrepentimiento_registrar", {
+            method: "POST",
+            headers: { "apikey": KEY, "Content-Type": "application/json" },
+            body: JSON.stringify({ p_tipo: tipoActual(), p_nombre: nombre, p_email: email, p_telefono: $("tel").value, p_referencia: $("ref").value, p_mensaje: $("msg").value })
+          });
+          var d = await r.json().catch(function () { return {}; });
+          if (!r.ok || !d.ok) return fallo(MSJ[d && d.error] || "No pudimos enviar el pedido. Probá de nuevo en un momento o escribinos por WhatsApp.");
+          $("codigo").textContent = d.codigo;
+          var f = new Date(d.fecha);
+          $("fecha").textContent = "Registrado el " + f.toLocaleString("es-AR", { dateStyle: "long", timeStyle: "short" });
+          var msg = "Hola! Hice un pedido de " + (tipoActual() === "baja" ? "baja de servicio" : "arrepentimiento") + " en la web. Mi código es " + d.codigo + ".";
+          var L = window.LEGAL; if (L && L.whatsapp) $("wa").href = "https://wa.me/" + L.whatsapp + "?text=" + encodeURIComponent(msg); else $("wa").hidden = true;
+          $("vForm").hidden = true; $("vListo").hidden = false; window.scrollTo(0, 0);
+        } catch (e) { fallo("No pudimos conectarnos. Revisá tu internet y probá de nuevo."); }
+      });
+    })();
+  </script>
+</body>
+</html>
