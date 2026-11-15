@@ -1080,11 +1080,13 @@
         const res = await Promise.all([
           rpc("cursos_resumen", {}),
           leer("/rest/v1/resenas_cursos?select=id,estrellas,texto,visible,creado,cursos(nombre),alumnas(nombre)&order=creado.desc&limit=100").catch(function () { return []; }),
-          rpc("arrepentimientos_listar", {}).catch(function () { return null; })
+          rpc("arrepentimientos_listar", {}).catch(function () { return null; }),
+          rpc("interes_resumen", {}).catch(function () { return null; })
         ]);
         PN.filas = res[0] && res[0].ok ? (res[0].filas || []) : [];
         PN.resenas = res[1] || [];
         PN.pedidos = res[2] && res[2].ok ? (res[2].filas || []) : [];
+        PN.interes = res[3] && res[3].ok ? res[3] : { resumen: [], contactos: [] };
       } catch (e) { return mensaje("No pudimos cargar el panel", "Revisá tu conexión y probá de nuevo.", [boton("Reintentar", irPanel)]); }
       pintarPanel();
     }
@@ -1095,7 +1097,7 @@
       const h1 = el("h1", ""); h1.appendChild(document.createTextNode("Panel de ")); h1.appendChild(el("em", "", "Nena")); v.appendChild(h1);
       if (PN.abierta) { pnFicha(v); return vista("vDuena"); }
       const nav = el("div", "pn-sub");
-      [["alumnas", "Alumnas"], ["stats", "Estadísticas"], ["opiniones", "Opiniones"], ["talleres", "Talleres"], ["pedidos", "Arrepentimientos" + (PN.pedidos.filter(function (p) { return p.estado === "recibido"; }).length ? " (" + PN.pedidos.filter(function (p) { return p.estado === "recibido"; }).length + ")" : "")]].forEach(function (x) {
+      [["alumnas", "Alumnas"], ["stats", "Estadísticas"], ["opiniones", "Opiniones"], ["talleres", "Talleres"], ["interes", "Interés"], ["pedidos", "Arrepentimientos" + (PN.pedidos.filter(function (p) { return p.estado === "recibido"; }).length ? " (" + PN.pedidos.filter(function (p) { return p.estado === "recibido"; }).length + ")" : "")]].forEach(function (x) {
         const b = el("button", "btn btn-borde btn-chico", x[1]);
         b.type = "button"; b.setAttribute("aria-pressed", PN.sub === x[0] ? "true" : "false");
         b.onclick = function () { PN.sub = x[0]; pintarPanel(); };
@@ -1106,6 +1108,7 @@
       else if (PN.sub === "stats") pnStats(v);
       else if (PN.sub === "opiniones") pnOpiniones(v);
       else if (PN.sub === "pedidos") pnPedidos(v);
+      else if (PN.sub === "interes") pnInteres(v);
       else pnTalleres(v);
       vista("vDuena");
     }
@@ -1268,6 +1271,36 @@
         it.appendChild(acc);
         caja.appendChild(it);
       });
+      v.appendChild(caja);
+    }
+    function pnInteres(v) {
+      const caja = el("div", "caja");
+      const NOMBRES = { "soft-gel": "Soft Gel", "capping-gel": "Capping Gel", "esmaltado-semipermanente": "Esmaltado Semipermanente" };
+      const I = PN.interes || { resumen: [], contactos: [] };
+      caja.appendChild(el("p", "ayuda", "Acá ves cuántas personas tocaron “Me interesa” en cada taller de la web, antes del lanzamiento."));
+      if (!I.resumen.length) caja.appendChild(el("p", "ayuda", "Todavía nadie se anotó."));
+      I.resumen.forEach(function (r) {
+        const t = el("div", "pn-taller");
+        t.appendChild(el("h3", "", NOMBRES[r.taller] || r.taller));
+        t.appendChild(el("p", "", r.cantidad + (r.cantidad === 1 ? " interesada" : " interesadas") + " · " + r.con_contacto + " dejaron contacto"));
+        caja.appendChild(t);
+      });
+      if (I.contactos.length) {
+        caja.appendChild(el("h3", "", "Contactos para avisarles"));
+        I.contactos.forEach(function (c) {
+          const it = el("article", "pn-taller");
+          it.appendChild(el("p", "", c.contacto));
+          it.appendChild(el("p", "ayuda", (NOMBRES[c.taller] || c.taller) + " · " + fechaLarga(c.creado)));
+          const dig = String(c.contacto).replace(/\D/g, "");
+          if (c.contacto.indexOf("@") < 0 && dig.length >= 8) {
+            const a = el("a", "btn btn-borde btn-chico", "Escribirle por WhatsApp");
+            a.href = "https://wa.me/" + (dig.length <= 10 ? "549" + dig.replace(/^0/, "") : dig);
+            a.target = "_blank"; a.rel = "noopener";
+            it.appendChild(a);
+          }
+          caja.appendChild(it);
+        });
+      }
       v.appendChild(caja);
     }
     function pnPedidos(v) {

@@ -852,6 +852,13 @@
     .tll-valor { color: var(--bronce); }
     .tll-pie { margin: 32px 0 0; text-align: center; font-size: 14.5px; color: var(--suave); }
     .tll-pie a { color: var(--bronce); }
+    .tll-soon { align-self: flex-start; font: 500 10.5px/1 var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--bronce); border: 1px solid var(--oro-fino); padding: 7px 10px; }
+    .tll-form { display: grid; gap: 10px; width: 100%; }
+    .tll-form input { width: 100%; height: 46px; padding: 0 14px; border: 1px solid var(--linea); background: var(--marfil); font: 400 15px var(--sans); color: var(--tinta); }
+    .tll-form small { color: var(--suave); font-size: 12.5px; line-height: 1.5; }
+    .tll-form small a { color: var(--bronce); }
+    .tll-gracias { margin: 0; color: var(--bronce); font-size: 15px; line-height: 1.5; }
+    .tll-err { margin: 0; color: #9a3b2e; font-size: 13.5px; }
   </style>
 </head>
 <body>
@@ -866,7 +873,7 @@
         </button>
         <nav class="nav-links" aria-label="Secciones">
           <a href="#servicios">Servicios</a>
-          <a href="#talleres" data-talleres hidden>Talleres</a>
+          <a href="#talleres">Talleres</a>
           <a href="#seccionGaleria" data-galeria hidden>Galería</a>
           <a href="#reservas">Reservas</a>
           <a href="#contacto">Contacto</a>
@@ -884,7 +891,7 @@
   <div class="menu-movil" id="menuMovil" hidden>
     <nav aria-label="Menú principal">
       <a href="#servicios">Servicios</a>
-      <a href="#talleres" data-talleres hidden>Talleres</a>
+      <a href="#talleres">Talleres</a>
       <a href="#seccionGaleria" data-galeria hidden>Galería</a>
       <a href="#reservas">Reservas</a>
       <a href="#contacto">Horarios y contacto</a>
@@ -943,14 +950,14 @@
     </section>
 
     <!-- ============ TALLERES ONLINE (aparece sola cuando hay talleres activos en el panel) ============ -->
-    <section class="seccion banda" id="talleres" hidden aria-labelledby="talleresTitulo">
+    <section class="seccion banda" id="talleres" aria-labelledby="talleresTitulo">
       <div class="wrap">
         <header class="titulo-seccion revelar">
-          <div><span class="eyebrow">Formación online</span><h2 id="talleresTitulo">Talleres <em>online</em></h2></div>
-          <p>Clases en video para iniciarte desde cero en el mundo de la manicuría. Estudiás a tu ritmo, desde cualquier lugar del país.</p>
+          <div><span class="eyebrow" id="talleresEyebrow">Próximamente</span><h2 id="talleresTitulo">Talleres <em>online</em></h2></div>
+          <p id="talleresTexto">Estamos preparando talleres online de manicuría, con clases en video para estudiar a tu ritmo. Tocá “Me interesa” en el que quieras y te avisamos apenas abra la inscripción.</p>
         </header>
         <div class="tll-grid" id="listaTalleres"></div>
-        <p class="tll-pie"><a href="aula.html">¿Ya compraste un taller? Entrá a tu aula</a></p>
+        <p class="tll-pie" id="tllPie" hidden><a href="aula.html">¿Ya compraste un taller? Entrá a tu aula</a></p>
       </div>
     </section>
 
@@ -1087,7 +1094,7 @@
       <div class="orn" aria-hidden="true"><i></i><b></b><i></i></div>
       <div class="pie-links">
         <a href="#servicios">Servicios</a>
-        <a href="#talleres" data-talleres hidden>Talleres</a>
+        <a href="#talleres">Talleres</a>
         <a href="#reservas">Reservar turno</a>
         <a href="#contacto">Horarios y contacto</a>
       </div>
@@ -2892,6 +2899,71 @@
   </script>
   <script>
     // ---------- Talleres online: la sección y sus links aparecen solos si hay talleres activos ----------
+    const PROXIMOS = [
+      { slug: "soft-gel", nombre: "Soft Gel" },
+      { slug: "capping-gel", nombre: "Capping Gel" },
+      { slug: "esmaltado-semipermanente", nombre: "Esmaltado Semipermanente" }
+    ];
+    function yaAnotado(slug) { try { return (JSON.parse(localStorage.getItem("tll_interes") || "[]")).indexOf(slug) >= 0; } catch (e) { return false; } }
+    function marcarAnotado(slug) { try { const l = JSON.parse(localStorage.getItem("tll_interes") || "[]"); if (l.indexOf(slug) < 0) l.push(slug); localStorage.setItem("tll_interes", JSON.stringify(l)); } catch (e) { /* sin almacenamiento */ } }
+    function pintarProximamente() {
+      const cont = $("listaTalleres");
+      cont.replaceChildren();
+      PROXIMOS.forEach(function (t) {
+        const card = el("article", "tll-card");
+        card.appendChild(el("div", "tll-portada vacia"));
+        const info = el("div", "tll-info");
+        info.appendChild(el("span", "tll-soon", "Próximamente"));
+        info.appendChild(el("h3", "", t.nombre));
+        const datos = el("ul", "tll-datos");
+        datos.appendChild(el("li", "", "Clases en video + material"));
+        datos.appendChild(el("li", "", "Certificado al terminar"));
+        info.appendChild(datos);
+        const meta = el("div", "tll-meta");
+        function gracias() { meta.replaceChildren(el("p", "tll-gracias", "¡Listo! Te anotamos. Gracias por tu interés 💛")); }
+        if (yaAnotado(t.slug)) { gracias(); }
+        else {
+          const b = el("button", "btn btn-oro", "Me interesa");
+          b.type = "button";
+          b.setAttribute("aria-label", "Me interesa el taller " + t.nombre);
+          b.onclick = function () {
+            const f = el("form", "tll-form");
+            const inp = document.createElement("input");
+            inp.type = "text"; inp.maxLength = 120; inp.autocomplete = "off";
+            inp.placeholder = "Tu WhatsApp o mail (opcional)";
+            inp.setAttribute("aria-label", "Tu WhatsApp o mail, opcional, para avisarte del lanzamiento");
+            const ok = el("button", "btn btn-oro", "Anotarme");
+            ok.type = "submit";
+            const nota = el("small", "");
+            nota.appendChild(document.createTextNode("Si lo dejás, solo lo usamos para avisarte del lanzamiento. "));
+            const lk = el("a", "", "Privacidad"); lk.href = "privacidad.html"; nota.appendChild(lk);
+            const err = el("p", "tll-err"); err.hidden = true; err.setAttribute("role", "alert");
+            f.appendChild(inp); f.appendChild(ok); f.appendChild(nota); f.appendChild(err);
+            f.onsubmit = async function (ev) {
+              ev.preventDefault();
+              ok.disabled = true; err.hidden = true;
+              try {
+                const r = await fetch(SUPABASE_URL + "/rest/v1/rpc/interes_registrar", {
+                  method: "POST", headers: { "apikey": SUPABASE_KEY, "Content-Type": "application/json" },
+                  body: JSON.stringify({ p_taller: t.slug, p_contacto: inp.value })
+                });
+                const d = r.ok ? await r.json() : null;
+                if (d && d.ok) { marcarAnotado(t.slug); gracias(); return; }
+                err.textContent = d && d.error === "contacto" ? "Revisá el WhatsApp o el mail, o dejalo vacío." : "No pudimos anotarte ahora. Probá de nuevo en un rato.";
+              } catch (e) { err.textContent = "No pudimos anotarte ahora. Revisá tu conexión y probá de nuevo."; }
+              err.hidden = false; ok.disabled = false;
+            };
+            meta.replaceChildren(f);
+            inp.focus();
+          };
+          meta.appendChild(b);
+        }
+        info.appendChild(meta);
+        card.appendChild(info);
+        cont.appendChild(card);
+      });
+    }
+    pintarProximamente();
     (async function () {
       try {
         const r = await fetch(SUPABASE_URL + "/rest/v1/cursos?select=id,slug,nombre,descripcion,portada_url,precio,acceso_dias&activo=eq.true&order=orden.asc,id.asc", {
@@ -2950,8 +3022,9 @@
           card.appendChild(info);
           cont.appendChild(card);
         });
-        $("talleres").hidden = false;
-        document.querySelectorAll("[data-talleres]").forEach(function (x) { x.hidden = false; });
+        $("talleresEyebrow").textContent = "Formación online";
+        $("talleresTexto").textContent = "Clases en video para iniciarte desde cero en el mundo de la manicuría. Estudiás a tu ritmo, desde cualquier lugar del país.";
+        $("tllPie").hidden = false;
       } catch (e) { /* sin conexión o sin talleres: la página sigue igual */ }
     })();
   </script>
