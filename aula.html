@@ -425,7 +425,7 @@
       if (S.token) {
         n.appendChild(el("span", "quien", emailSesion()));
         if (S.duena) {
-          const pn = el("button", "btn btn-chico", "Panel de Nena");
+          const pn = el("button", "btn btn-chico", "Panel de dueño");
           pn.type = "button"; pn.onclick = irPanel;
           n.appendChild(pn);
         }
@@ -667,7 +667,7 @@
       if (S.duena) {
         const av = el("div", "aviso");
         av.appendChild(el("p", "", "Estás ingresando como dueña. Desde el panel ves quién compró, cómo avanza cada alumna y las opiniones."));
-        av.appendChild(boton("Abrir el panel de Nena", irPanel));
+        av.appendChild(boton("Abrir el panel de dueño", irPanel));
         v.appendChild(av);
       }
 
@@ -1094,7 +1094,7 @@
       const v = $("vDuena");
       v.replaceChildren();
       v.appendChild(el("span", "eyebrow", "Solo para vos"));
-      const h1 = el("h1", ""); h1.appendChild(document.createTextNode("Panel de ")); h1.appendChild(el("em", "", "Nena")); v.appendChild(h1);
+      const h1 = el("h1", ""); h1.appendChild(document.createTextNode("Panel de ")); h1.appendChild(el("em", "", "dueño")); v.appendChild(h1);
       if (PN.abierta) { pnFicha(v); return vista("vDuena"); }
       const nav = el("div", "pn-sub");
       [["alumnas", "Alumnas"], ["stats", "Estadísticas"], ["opiniones", "Opiniones"], ["talleres", "Talleres"], ["interes", "Interés"], ["pedidos", "Arrepentimientos" + (PN.pedidos.filter(function (p) { return p.estado === "recibido"; }).length ? " (" + PN.pedidos.filter(function (p) { return p.estado === "recibido"; }).length + ")" : "")]].forEach(function (x) {

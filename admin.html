@@ -162,6 +162,7 @@
     .cu-subida { margin: 14px 0 6px; padding: 12px; border: 1px dashed var(--linea-2); }
     .cu-subnav { display: flex; gap: 8px; margin: 0 0 14px; flex-wrap: wrap; }
     .cu-subnav .btn { flex: 1 1 0; min-width: 96px; justify-content: center; }
+    .cu-subnav .cu-dueno { flex: 1 1 100%; border-style: dashed; letter-spacing: .12em; }
     .tabs {
       position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
       background: rgba(246, 240, 228, .97); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-top: 1px solid var(--linea);
@@ -753,6 +754,7 @@
           <button type="button" class="btn btn-oro btn-chico" data-sub="cuPaneAlumnas" aria-pressed="true">Alumnas</button>
           <button type="button" class="btn btn-borde btn-chico" data-sub="cuPaneTalleres" aria-pressed="false">Talleres</button>
           <button type="button" class="btn btn-borde btn-chico" data-sub="cuPaneOpiniones" aria-pressed="false">Opiniones</button>
+          <button type="button" class="btn btn-borde btn-chico cu-dueno" data-sub="cuPaneDueno" aria-pressed="false">Panel de dueño</button>
         </nav>
         <div id="cuPaneAlumnas" class="cu-pane">
         <div class="stats" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
@@ -789,6 +791,18 @@
           <h2>Opiniones de las alumnas</h2>
           <p class="nota">Las opiniones nuevas no se publican solas: aprobalas para que se vean. Si alguna no corresponde, dejala sin publicar (la alumna sigue viéndola) o borrala.</p>
           <div id="cuResenas" class="agenda"></div>
+        </div>
+        </div>
+        <div id="cuPaneDueno" class="cu-pane" hidden>
+        <div class="tarjeta">
+          <h2>Interés en los talleres</h2>
+          <p class="nota">Cuántas personas tocaron “Me interesa” en la web antes del lanzamiento, y los contactos que dejaron para avisarles.</p>
+          <div id="cuInteres" class="agenda"></div>
+        </div>
+        <div class="tarjeta">
+          <h2>Arrepentimientos y bajas</h2>
+          <p class="nota">Acá llegan los pedidos de los botones de arrepentimiento y de baja de la web. Tenés que responderles y, si corresponde, devolver el dinero desde Mercado Pago y tocar “Reembolsar” en la ficha de la alumna (eso le corta el acceso).</p>
+          <div id="cuPedidos" class="agenda"></div>
         </div>
         </div>
       </section>
@@ -1465,6 +1479,7 @@
         estado.textContent = "";
         cuPintar();
         cuCargarResenas();
+        cuCargarDueno();
       } catch (e) {
         estado.textContent = cuErrorTablas(e)
           ? "La sección de talleres todavía no está instalada en tu base de datos. Pedile ayuda a quien armó tu página."
@@ -1952,6 +1967,93 @@
     $("cuNuevo").onclick = cuNuevoTaller;
 
     // ---------- Opiniones de las alumnas (moderación) ----------
+    // ---------- Panel de dueño: interés en talleres y pedidos de arrepentimiento / baja ----------
+    const CU_TALLERES_NOMBRE = { "soft-gel": "Soft Gel", "capping-gel": "Capping Gel", "esmaltado-semipermanente": "Esmaltado Semipermanente" };
+    async function cuRpcDueno(nombre) {
+      const r = await api("/rest/v1/rpc/" + nombre, { method: "POST", body: "{}" });
+      if (!r.ok) throw new Error("Error " + r.status);
+      const d = await r.json();
+      if (!d || !d.ok) throw new Error("no ok");
+      return d;
+    }
+    async function cuCargarDueno() {
+      const aviso = function (cont, t) { cont.replaceChildren(el("p", "nota", t)); };
+      try { CU.interes = await cuRpcDueno("interes_resumen"); cuPintarInteres(); }
+      catch (e) { aviso($("cuInteres"), "Todavía no está instalado el conteo de interés en tu base de datos."); }
+      try { CU.pedidos = (await cuRpcDueno("arrepentimientos_listar")).filas || []; cuPintarPedidos(); }
+      catch (e) { aviso($("cuPedidos"), "Todavía no está instalado el botón de arrepentimiento en tu base de datos."); }
+    }
+    function cuPintarInteres() {
+      const cont = $("cuInteres");
+      cont.replaceChildren();
+      const I = CU.interes || { resumen: [], contactos: [] };
+      if (!I.resumen.length) { cont.appendChild(el("p", "nota", "Todavía nadie se anotó.")); return; }
+      I.resumen.forEach(function (r) {
+        const caja = el("div", "item-caja");
+        caja.appendChild(el("div", "item-nombre", CU_TALLERES_NOMBRE[r.taller] || r.taller));
+        caja.appendChild(el("div", "item-det", r.cantidad + (r.cantidad === 1 ? " interesada" : " interesadas") + " · " + r.con_contacto + " dejaron contacto"));
+        cont.appendChild(caja);
+      });
+      if (I.contactos.length) {
+        cont.appendChild(el("p", "nota", "Contactos para avisarles cuando abra:"));
+        I.contactos.forEach(function (c) {
+          const caja = el("div", "item-caja");
+          caja.appendChild(el("div", "item-nombre", c.contacto));
+          caja.appendChild(el("div", "item-det", (CU_TALLERES_NOMBRE[c.taller] || c.taller) + " · " + cuFecha(c.creado)));
+          if (String(c.contacto).indexOf("@") < 0 && waNumero(c.contacto).length >= 10) {
+            const a = el("a", "btn btn-borde btn-chico", "Escribirle por WhatsApp");
+            a.href = "https://wa.me/" + waNumero(c.contacto); a.target = "_blank"; a.rel = "noopener";
+            caja.appendChild(a);
+          }
+          cont.appendChild(caja);
+        });
+      }
+    }
+    function cuPintarPedidos() {
+      const cont = $("cuPedidos");
+      cont.replaceChildren();
+      const pend = CU.pedidos.filter(function (p) { return p.estado === "recibido"; }).length;
+      const bt = document.querySelector('[data-sub="cuPaneDueno"]');
+      if (bt) bt.textContent = pend ? "Panel de dueño (" + pend + " por resolver)" : "Panel de dueño";
+      if (!CU.pedidos.length) { cont.appendChild(el("p", "nota", "Todavía no hay pedidos.")); return; }
+      CU.pedidos.forEach(function (p) {
+        const caja = el("div", "item-caja");
+        const cab = el("div", "cu-cab");
+        cab.appendChild(el("div", "item-nombre", p.codigo));
+        cab.appendChild(el("span", "cu-tag " + (p.estado === "recibido" ? "aviso" : "ok"), p.estado === "recibido" ? "Por resolver" : "Resuelto"));
+        caja.appendChild(cab);
+        caja.appendChild(el("div", "item-det", (p.tipo === "baja" ? "Baja de servicio" : "Arrepentimiento") + " · " + p.nombre));
+        caja.appendChild(el("div", "item-det", p.email + (p.telefono ? " · " + p.telefono : "") + " · " + cuFecha(p.creado)));
+        if (p.referencia) caja.appendChild(el("div", "item-det", "Compró: " + p.referencia));
+        if (p.mensaje) caja.appendChild(el("div", "item-det", "“" + p.mensaje + "”"));
+        if (p.nota) caja.appendChild(el("div", "item-det", "Nota: " + p.nota));
+        const acc = el("div", "cu-acc");
+        if (p.telefono && waNumero(p.telefono).length >= 10) {
+          const a = el("a", "btn btn-borde btn-chico", "Escribirle por WhatsApp");
+          a.href = "https://wa.me/" + waNumero(p.telefono) + "?text=" + encodeURIComponent("Hola " + p.nombre + "! Recibimos tu pedido " + p.codigo + ".");
+          a.target = "_blank"; a.rel = "noopener"; acc.appendChild(a);
+        }
+        if (p.estado === "recibido") {
+          const nota = el("input", "input input-chico");
+          nota.type = "text"; nota.maxLength = 300; nota.placeholder = "Nota para vos (opcional)";
+          nota.setAttribute("aria-label", "Nota para vos, opcional");
+          const ok = cuBoton("Marcar como resuelto", async function () {
+            ok.disabled = true;
+            try {
+              const r = await api("/rest/v1/rpc/arrepentimiento_resolver", { method: "POST", body: JSON.stringify({ p_id: p.id, p_nota: nota.value }) });
+              const d = r.ok ? await r.json() : null;
+              if (!d || !d.ok) throw new Error("resolver");
+              p.estado = "resuelto"; p.nota = nota.value.trim() || null; cuPintarPedidos();
+            } catch (e) { ok.disabled = false; ok.textContent = "No se pudo, probá de nuevo"; }
+          }, "btn-oro");
+          caja.appendChild(nota);
+          acc.appendChild(ok);
+        }
+        caja.appendChild(acc);
+        cont.appendChild(caja);
+      });
+    }
+
     async function cuCargarResenas() {
       const cont = $("cuResenas");
       try {
@@ -2008,10 +2110,10 @@
 
     // Sub-pestañas de Talleres: Alumnas / Talleres / Opiniones
     function cuSubir(id) {
-      ["cuPaneAlumnas", "cuPaneTalleres", "cuPaneOpiniones"].forEach(function (p) { $(p).hidden = p !== id; });
+      ["cuPaneAlumnas", "cuPaneTalleres", "cuPaneOpiniones", "cuPaneDueno"].forEach(function (p) { $(p).hidden = p !== id; });
       document.querySelectorAll("#cuSubnav button").forEach(function (b) {
         const on = b.dataset.sub === id;
-        b.className = "btn btn-chico " + (on ? "btn-oro" : "btn-borde");
+        b.className = "btn btn-chico " + (on ? "btn-oro" : "btn-borde") + (b.dataset.sub === "cuPaneDueno" ? " cu-dueno" : "");
         b.setAttribute("aria-pressed", on ? "true" : "false");
       });
     }
